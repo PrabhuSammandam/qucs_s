@@ -28,7 +28,9 @@
 #include "../paintings/id_text.h"
 #include "dialogs/sweepdialog.h"
 #include <QPlainTextEdit>
+#include <algorithm>
 
+using namespace Qt;
 /*!
   \file abstractspicekernel.cpp
   \brief Implementation of the AbstractSpiceKernel class
@@ -234,7 +236,7 @@ void AbstractSpiceKernel::createSubNetlsit(QTextStream &stream, bool lib)
                                    pc->Ports.first()->Connection->Name));
         }
     }
-    qSort(ports);
+    std::sort(ports.begin(), ports.end());
     QPair<int,QString> pp;
     if (lib) header += " gnd "; // Ground node forwarding for Library
     foreach(pp,ports) {
@@ -303,7 +305,7 @@ void AbstractSpiceKernel::parseNgSpiceSimOutput(QString ngspice_file,QList< QLis
     bool start_values_sec = false;
     int NumVars=0; // Number of dep. and indep.variables
     while (!ngsp_data.atEnd()) { // Parse header;
-        QRegExp sep("[ \t,]");
+        QRegularExpression sep("[ \t,]");
         QString lin = ngsp_data.readLine();
         if (lin.isEmpty()) continue;
         if (lin.contains("Flags")&&lin.contains("complex")) { // output consists of
@@ -380,7 +382,7 @@ void AbstractSpiceKernel::parseHBOutput(QString ngspice_file, QList<QList<double
                 continue;
             }
             if (lin.startsWith("Index")) { // CSV heading
-                    QStringList vars1 = lin.split(" ",QString::SkipEmptyParts);
+                    QStringList vars1 = lin.split(" ",Qt::SkipEmptyParts);
                     vars1.removeFirst();
                     vars1.removeFirst();
                     QStringList norm_vars;
@@ -392,8 +394,8 @@ void AbstractSpiceKernel::parseHBOutput(QString ngspice_file, QList<QList<double
                     }
                     var_list.append(norm_vars);
             }
-            if ((lin.contains(QRegExp("\\d*\\.\\d+[+-]*[eE]*[\\d]*")))) { // CSV dataline
-                QStringList vals = lin.split(" ",QString::SkipEmptyParts);
+            if ((lin.contains(QRegularExpression("\\d*\\.\\d+[+-]*[eE]*[\\d]*")))) { // CSV dataline
+                QStringList vals = lin.split(" ",Qt::SkipEmptyParts);
                 QList <double> sim_point;
                 sim_point.clear();
                 for (int i=1;i<vals.count();i++) {
@@ -425,11 +427,11 @@ void AbstractSpiceKernel::parseFourierOutput(QString ngspice_file, QList<QList<d
         int Nharm; // number of harmonics
         bool firstgroup = false;
         while (!ngsp_data.atEnd()) {
-            QRegExp sep("[ \t,]");
+            QRegularExpression sep("[ \t,]");
             QString lin = ngsp_data.readLine();
             if (lin.isEmpty()) continue;
             if (lin.contains("Fourier analysis for")) {
-                QStringList tokens = lin.split(sep,QString::SkipEmptyParts);
+                QStringList tokens = lin.split(sep,Qt::SkipEmptyParts);
                 QString var;
                 foreach(var,tokens) {
                     if (var.contains('(')&&var.contains(')')) break;
@@ -446,7 +448,7 @@ void AbstractSpiceKernel::parseFourierOutput(QString ngspice_file, QList<QList<d
                 QString ss = lin.section(sep,2,2,QString::SectionSkipEmpty);
                 if (ss.endsWith(',')) ss.chop(1);
                 Nharm = ss.toInt();
-                while (!ngsp_data.readLine().contains(QRegExp("Harmonic\\s+Frequency")));
+                while (!ngsp_data.readLine().contains(QRegularExpression("Harmonic\\s+Frequency")));
                 if (!(QucsSettings.DefaultSimulator == spicecompat::simXyceSer||
                       QucsSettings.DefaultSimulator == spicecompat::simXycePar)) lin = ngsp_data.readLine(); // dummy line
                 for (int i=0;i<Nharm;i++) {
@@ -638,8 +640,8 @@ void AbstractSpiceKernel::parseDC_OPoutputXY(QString xyce_file)
         QTextStream ngsp_data(&ofile);
         QStringList lines = ngsp_data.readAll().split("\n");
         if (lines.count()>=2) {
-            QStringList nods = lines.at(0).split(QRegExp("\\s"),QString::SkipEmptyParts);
-            QStringList vals = lines.at(1).split(QRegExp("\\s"),QString::SkipEmptyParts);
+            QStringList nods = lines.at(0).split(QRegularExpression("\\s"),Qt::SkipEmptyParts);
+            QStringList vals = lines.at(1).split(QRegularExpression("\\s"),Qt::SkipEmptyParts);
             QStringList::iterator n,v;
             for(n = nods.begin(),v = vals.begin();n!=nods.end()||v!=vals.end();n++,v++) {
                 if ((*n).startsWith("I(")) {
@@ -693,7 +695,7 @@ void AbstractSpiceKernel::parseSTEPOutput(QString ngspice_file,
     int NumVars=0; // Number of dep. and indep.variables
     int NumPoints=0; // Number of simulation points
     while (!ngsp_data.atEnd()) {
-        QRegExp sep("[ \t,]");
+        QRegularExpression sep("[ \t,]");
         QString lin = ngsp_data.readLine();
         if (lin.isEmpty()) continue;
         if (lin.contains("Plotname:")&&  // skip operating point
@@ -786,18 +788,18 @@ void AbstractSpiceKernel::extractBinSamples(QDataStream &dbl, QList<QList<double
 bool AbstractSpiceKernel::extractASCIISamples(QString &lin, QTextStream &ngsp_data,
                                               QList<QList<double> > &sim_points, int NumVars, bool isComplex)
 {
-    QRegExp sep("[ \t,]");
+    QRegularExpression sep("[ \t,]");
     QList<double> sim_point;
     bool ok = false;
     QRegExp dataline_patter("^ *[0-9]+[ \t]+.*");
     if (!dataline_patter.exactMatch(lin)) return false;
     double indep_val = lin.section(sep,1,1,QString::SectionSkipEmpty).toDouble(&ok);
-    //double indep_val = lin.split(sep,QString::SkipEmptyParts).at(1).toDouble(&ok); // only real indep vars
+    //double indep_val = lin.split(sep,Qt::SkipEmptyParts).at(1).toDouble(&ok); // only real indep vars
     if (!ok) return false;
     sim_point.append(indep_val);
     for (int i=0;i<NumVars;i++) {
         if (isComplex) {
-            QStringList lst = ngsp_data.readLine().split(sep,QString::SkipEmptyParts);
+            QStringList lst = ngsp_data.readLine().split(sep,Qt::SkipEmptyParts);
             if (lst.count()==2) {
                 double re_dep_val = lst.at(0).toDouble();  // for complex sim results
                 double im_dep_val = lst.at(1).toDouble();  // imaginary part follows
@@ -842,11 +844,11 @@ void AbstractSpiceKernel::parseXYCESTDOutput(QString std_file, QList<QList<doubl
         if (lin.isEmpty()) continue;
         if (lin.startsWith("End of ")) continue;
         if (lin.startsWith("Index ",Qt::CaseInsensitive)) {
-            var_list = lin.split(" ",QString::SkipEmptyParts);
+            var_list = lin.split(" ",Qt::SkipEmptyParts);
             var_list.removeFirst(); // Drop Index
             continue;
         } else {
-            QStringList val_lst = lin.split(" ",QString::SkipEmptyParts);
+            QStringList val_lst = lin.split(" ",Qt::SkipEmptyParts);
             QList<double> sim_point;
             foreach (QString val, val_lst) {
                 sim_point.append(val.toDouble());
@@ -916,13 +918,13 @@ void AbstractSpiceKernel::parseResFile(QString resfile, QString &var, QStringLis
         while (!swp_data.atEnd()) {
             QRegExp point_pattern("^\\s*[0-9]+ .*");
             QRegExp var_pattern("^STEP\\s+.*");
-            QRegExp sep("\\s");
+            QRegularExpression sep("\\s");
             QString lin = swp_data.readLine();
             if (var_pattern.exactMatch(lin)) {
-                var = lin.split(sep,QString::SkipEmptyParts).last();
+                var = lin.split(sep,Qt::SkipEmptyParts).last();
             }
             if (point_pattern.exactMatch(lin)) {
-                values.append(lin.split(sep,QString::SkipEmptyParts).last());
+                values.append(lin.split(sep,Qt::SkipEmptyParts).last());
             }
         }
         ofile.close();
@@ -1013,7 +1015,7 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
             parseHBOutput(full_outfile,sim_points,var_list,hasParSweep);
             isComplex = true;
             if (hasParSweep) {
-                QString res_file = QDir::convertSeparators(workdir + QDir::separator()
+                QString res_file = QDir::toNativeSeparators(workdir + QDir::separator()
                                                         + "spice4qucs.hb.cir.res");
                 parseResFile(res_file,swp_var,swp_var_val);
             }
@@ -1032,7 +1034,7 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
             isComplex = false;
             parseNoiseOutput(full_outfile,sim_points,var_list,hasParSweep);
             if (hasParSweep) {
-                QString res_file = QDir::convertSeparators(workdir + QDir::separator()
+                QString res_file = QDir::toNativeSeparators(workdir + QDir::separator()
                                                         + "spice4qucs.noise.cir.res");
                 parseResFile(res_file,swp_var,swp_var_val);
             }
@@ -1040,7 +1042,7 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
             isComplex = true;
             parsePZOutput(full_outfile,sim_points,var_list,hasParSweep);
             if (hasParSweep) {
-                QString res_file = QDir::convertSeparators(workdir + QDir::separator()
+                QString res_file = QDir::toNativeSeparators(workdir + QDir::separator()
                                                         + "spice4qucs.pz.cir.res");
                 parseResFile(res_file,swp_var,swp_var_val);
             }
@@ -1050,7 +1052,7 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
             parseXYCESTDOutput(full_outfile,sim_points,var_list,isComplex);
             if (type == xyceSTDswp) {
                 hasParSweep = true;
-                QString res_file = QDir::convertSeparators(workdir + QDir::separator()
+                QString res_file = QDir::toNativeSeparators(workdir + QDir::separator()
                                                         + "spice4qucs.sens.cir.res");
                 parseResFile(res_file,swp_var,swp_var_val);
             }
@@ -1062,14 +1064,14 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
                 hasDblParSweep = true;
                 simstr.chop(4);
                 simstr = simstr.split('_').last();
-                QString res2_file = QDir::convertSeparators(workdir + QDir::separator()
+                QString res2_file = QDir::toNativeSeparators(workdir + QDir::separator()
                                                             + "spice4qucs." + simstr + ".cir.res1");
                 parseResFile(res2_file,swp_var2,swp_var2_val);
             } else {
                 simstr = simstr.split('_').last();
             }
 
-            QString res_file = QDir::convertSeparators(workdir + QDir::separator()
+            QString res_file = QDir::toNativeSeparators(workdir + QDir::separator()
                                                     + "spice4qucs." + simstr + ".cir.res");
             parseResFile(res_file,swp_var,swp_var_val);
 

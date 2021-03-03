@@ -235,7 +235,7 @@ bool Optimize_Sim::createASCOnetlist()
       }
       else
       {
-          QRegExp reg = QRegExp("=\"(" + *it + ")\"");
+          QRegularExpression reg = QRegularExpression("=\"(" + *it + ")\"");
           Line.replace(reg, "=\"#\\1#\"");
       }
 
@@ -267,7 +267,7 @@ bool Optimize_Sim::loadASCOout()
   while(!instream.atEnd()) Line = instream.readLine();
   infile.close();
 
-  QStringList entries = QStringList::split(':',Line);
+  QStringList entries = Line.split(':');
   QStringList::Iterator it;
   for(it = entries.begin(); it != entries.end(); ++it ) {
     QString Name = *it;

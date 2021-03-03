@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QRegularExpressionValidator>
 
 class QLabel;
 class QLineEdit;
@@ -56,8 +57,8 @@ private:
   QGroupBox *Group;
   QPushButton *ButtDelete, *ButtRename, *ButtClose;
 
-  QRegExp Expr;
-  QRegExpValidator *Validator;
+  QRegularExpression Expr;
+  QRegularExpressionValidator *Validator;
 };
 
 #endif

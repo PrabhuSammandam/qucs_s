@@ -18,6 +18,7 @@
 #ifndef ARROWDIALOG_H
 #define ARROWDIALOG_H
 
+#include <QtWidgets>
 #include <QDialog>
 
 class QLineEdit;

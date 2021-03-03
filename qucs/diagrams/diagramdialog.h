@@ -17,6 +17,8 @@
 
 #ifndef DIAGRAMDIALOG_H
 #define DIAGRAMDIALOG_H
+
+#include <QtWidgets>
 #include "diagram.h"
 #include "node.h"
 
@@ -26,7 +28,7 @@
 
 #include <QDialog>
 #include <QRegExp>
-#include <Q3PtrList>
+#include "q3ptrlist.h"
 
 class QVBoxLayout;
 class Cross3D;
@@ -97,10 +99,10 @@ private:
   Diagram *Diag;
   QString defaultDataSet;
 
-  QRegExp Expr;
+  QRegularExpression Expr;
   QDoubleValidator *ValDouble;
   QIntValidator    *ValInteger;
-  QRegExpValidator *Validator;
+  QRegularExpressionValidator *Validator;
 
   QLabel *lblSim;
   QLabel *lblPlotVs;

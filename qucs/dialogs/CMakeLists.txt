@@ -1,8 +1,17 @@
 # qucs/dialogs library
 
+add_compile_definitions(${Qt6Widgets_COMPILE_DEFINITIONS}
+  ${Qt6Core5Compat_COMPILE_DEFINITIONS}
+  ${Qt6Core_COMPILE_DEFINITIONS}
+  ${Qt6Gui_COMPILE_DEFINITIONS})
+
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}
-                     ${CMAKE_CURRENT_BINARY_DIR} ) # ui_*.h, out of tree
+                     ${CMAKE_CURRENT_BINARY_DIR}
+                     ${Qt6Widgets_INCLUDE_DIRS}
+                     ${Qt6Core5Compat_INCLUDE_DIRS}
+                     ${Qt6Core_INCLUDE_DIRS}
+                     ${Qt6Gui_INCLUDE_DIRS}) # ui_*.h, out of tree
 
 #INCLUDES = $(X11_INCLUDES) $(QT_INCLUDES) -I$(top_srcdir)/qucs
 
@@ -67,8 +76,8 @@ SET(DIALOGS_UIC_HDRS
 searchdialog.ui
 )
 
-QT4_WRAP_CPP( DIALOGS_MOC_SRCS ${DIALOGS_MOC_HDRS} )
+QT6_WRAP_CPP( DIALOGS_MOC_SRCS ${DIALOGS_MOC_HDRS} )
 
-QT4_WRAP_UI( DIALOGS_UIC_SRCS ${DIALOGS_UIC_HDRS} )
+QT6_WRAP_UI( DIALOGS_UIC_SRCS ${DIALOGS_UIC_HDRS} )
 
 ADD_LIBRARY(dialogs ${DIALOGS_HDRS} ${DIALOGS_SRCS} ${DIALOGS_MOC_SRCS} ${DIALOGS_UIC_SRCS})

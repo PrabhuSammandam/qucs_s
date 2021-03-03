@@ -26,7 +26,7 @@ Param_Sweep::Param_Sweep()
   Description = QObject::tr("Parameter sweep");
 
   QString  s = Description;
-  int a = s.findRev(" ");
+  int a = s.lastIndexOf(" ");
   if (a != -1) s[a] = '\n';    // break line
 
   Texts.append(new Text(0, 0, s.left(a), Qt::darkBlue, QucsSettings.largeFontSize));
@@ -107,7 +107,7 @@ QString Param_Sweep::getNgspiceBeforeSim(QString sim, int lvl)
     QString par = getProperty("Param")->Value.toLower();
     QString type = getProperty("Type")->Value;
     QString step_var = par;
-    step_var.remove(QRegExp("[\\.\\[\\]@:]"));
+    step_var.remove(QRegularExpression("[\\.\\[\\]@:]"));
 
     s = QString("let number_%1 = 0\n").arg(step_var);
     if (lvl==0) s += QString("echo \"STEP %1.%2\" > spice4qucs.%3.cir.res\n").arg(sim).arg(step_var).arg(sim);
@@ -120,7 +120,7 @@ QString Param_Sweep::getNgspiceBeforeSim(QString sim, int lvl)
         List = getProperty("Values")->Value.split(";");
 
         for(int i = 0; i < List.length(); i++) {
-            List[i].remove(QRegExp("[A-Z a-z [\\] s/' '//g]"));
+            List[i].remove(QRegularExpression("[A-Z a-z [\\] s/' '//g]"));
             s += QString("%1 ").arg(List[i]);
         }
     } else {
@@ -157,10 +157,10 @@ QString Param_Sweep::getNgspiceBeforeSim(QString sim, int lvl)
     QString mod,mod_par;
 
     if (!par.contains('@')) {
-        QStringList par_lst = par.split('.',QString::SkipEmptyParts);
+        QStringList par_lst = par.split('.',Qt::SkipEmptyParts);
         if (par_lst.count()>1) {
             mod_par = par_lst.at(1);
-            Schematic *sch = (Schematic *) QucsMain->DocumentTab->currentPage();
+            Schematic *sch = (Schematic *) QucsMain->DocumentTab->currentWidget();
             Component *pc = sch->getComponentByName(par_lst.at(0));
             if (pc != NULL) {
                 mod = pc->getSpiceNetlist().section('\n',1,1,QString::SectionSkipEmpty)
@@ -188,7 +188,7 @@ QString Param_Sweep::getNgspiceAfterSim(QString sim, int lvl)
     QString s;
     QString par = getProperty("Param")->Value.toLower();
     QString type = getProperty("Type")->Value;
-    par.remove(QRegExp("[\\.\\[\\]@:]"));
+    par.remove(QRegularExpression("[\\.\\[\\]@:]"));
 
     s = "set appendwrite\n";
 
@@ -204,7 +204,7 @@ QString Param_Sweep::getNgspiceAfterSim(QString sim, int lvl)
 QString Param_Sweep::getCounterVar()
 {
     QString par = getProperty("Param")->Value;
-    par.remove(QRegExp("[\\.\\[\\]@:]"));
+    par.remove(QRegularExpression("[\\.\\[\\]@:]"));
     QString s = QString("number_%1").arg(par);
     return s;
 }

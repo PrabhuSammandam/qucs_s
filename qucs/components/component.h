@@ -18,7 +18,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <Q3PtrList>
+#include "q3ptrlist.h"
 
 #include "element.h"
 

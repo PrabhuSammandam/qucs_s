@@ -29,6 +29,8 @@
 #include <QPushButton>
 #include <QDebug>
 
+using namespace Qt;
+
 // SpinBoxes are used to show the calculated bias points at the given set of sweep points
 mySpinBox::mySpinBox(int Min, int Max, int Step, double *Val, QWidget *Parent)
           : QSpinBox(Parent)
@@ -94,9 +96,9 @@ SweepDialog::SweepDialog(Schematic *Doc_,QHash<QString,double> *NodeVals)
   int i = 0;
   // ...........................................................
   QGridLayout *all = new QGridLayout(this);//, pGraph->cPointsX.count()+2,2,3,3);
-  all->setMargin(5);
+//  all->setMargin(5);
   all->setSpacing(5);
-  all->setColStretch(1,5);
+//  all->setColStretch(1,5);
 
   DataX const *pD;
   mySpinBox *Box;
@@ -120,7 +122,8 @@ SweepDialog::SweepDialog(Schematic *Doc_,QHash<QString,double> *NodeVals)
   // ...........................................................
   all->setRowStretch(i,5);
   QPushButton *ButtClose = new QPushButton(tr("Close"), this);
-  all->addMultiCellWidget(ButtClose, i+1,i+1, 0,1);
+  all->addWidget(ButtClose, i+1,0);
+//  all->addMultiCellWidget(ButtClose, i+1,i+1, 0,1);
   connect(ButtClose, SIGNAL(clicked()), SLOT(accept()));
   show();
 }
@@ -170,7 +173,7 @@ Graph* SweepDialog::setBiasPoints(QHash<QString,double> *NodeVals)
   bool hasNoComp;
   Graph *pg = new Graph(NULL, ""); // HACK!
   QFileInfo Info(Doc->DocName);
-  QString DataSet = Info.dirPath() + QDir::separator() + Doc->DataSet;
+  QString DataSet = Info.dir().path() + QDir::separator() + Doc->DataSet;
 
   Node *pn;
   Element *pe;

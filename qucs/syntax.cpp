@@ -23,7 +23,7 @@
 
 #include "textdoc.h"
 #include "syntax.h"
-
+#include "QRegExp"
 
 SyntaxHighlighter::SyntaxHighlighter(TextDoc *textEdit) : QSyntaxHighlighter(textEdit)
 {

@@ -41,22 +41,22 @@ ChangeDialog::ChangeDialog(Schematic *Doc_)
   setWindowTitle(tr("Change Component Properties"));
 
   Expr.setPattern("[^\"=]+");  // valid expression for property value
-  Validator = new QRegExpValidator(Expr, this);
+  Validator = new QRegularExpressionValidator(Expr, this);
   Expr.setPattern("[\\w_]+");  // valid expression for property name
-  ValRestrict = new QRegExpValidator(Expr, this);
+  ValRestrict = new QRegularExpressionValidator(Expr, this);
 
 
   // ...........................................................
   all = new QGridLayout(this);//, 6,2,3,3);
-  all->setMargin(5);
+//  all->setMargin(5);
 
   all->addWidget(new QLabel(tr("Components:"), this), 0,0);
   CompTypeEdit = new QComboBox(this);
-  CompTypeEdit->insertItem(tr("all components"));
-  CompTypeEdit->insertItem(tr("resistors"));
-  CompTypeEdit->insertItem(tr("capacitors"));
-  CompTypeEdit->insertItem(tr("inductors"));
-  CompTypeEdit->insertItem(tr("transistors"));
+  CompTypeEdit->addItem(tr("all components"));
+  CompTypeEdit->addItem(tr("resistors"));
+  CompTypeEdit->addItem(tr("capacitors"));
+  CompTypeEdit->addItem(tr("inductors"));
+  CompTypeEdit->addItem(tr("transistors"));
   all->addWidget(CompTypeEdit, 0,1);
 
   all->addWidget(new QLabel(tr("Component Names:"), this), 1,0);
@@ -70,9 +70,9 @@ ChangeDialog::ChangeDialog(Schematic *Doc_)
   PropNameEdit = new QComboBox(this);
   PropNameEdit->setEditable(true);
   PropNameEdit->setValidator(ValRestrict);
-  PropNameEdit->insertItem("Temp");
-  PropNameEdit->insertItem("Subst");
-  PropNameEdit->insertItem("Model");
+  PropNameEdit->addItem("Temp");
+  PropNameEdit->addItem("Subst");
+  PropNameEdit->addItem("Model");
   all->addWidget(PropNameEdit, 2,1);
   connect(PropNameEdit, SIGNAL(activated(int)), SLOT(slotButtReplace()));
 
@@ -104,7 +104,7 @@ ChangeDialog::~ChangeDialog()
 // in "CompTypeEdit".
 bool ChangeDialog::matches(const QString& CompModel)
 {
-  switch(CompTypeEdit->currentItem()) {
+  switch(CompTypeEdit->currentIndex()) {
     case 0: return true;
     case 1: if(CompModel == "R") return true;
             return false;
@@ -127,8 +127,9 @@ bool ChangeDialog::matches(const QString& CompModel)
 // Is called if the "Replace"-button is pressed.
 void ChangeDialog::slotButtReplace()
 {
-  Expr.setWildcard(true);  // switch into wildcard mode
-  Expr.setPattern(CompNameEdit->text());
+//  Expr.setWildcard(true);  // switch into wildcard mode
+    auto wildcardex = QRegularExpression::wildcardToRegularExpression(CompNameEdit->text());
+  Expr.setPattern(wildcardex);
   if(!Expr.isValid()) {
     QMessageBox::critical(this, tr("Error"),
 	  tr("Regular expression for component name is invalid."));
@@ -140,14 +141,15 @@ void ChangeDialog::slotButtReplace()
   Dia->setWindowTitle(tr("Found Components"));
   QVBoxLayout *Dia_All = new QVBoxLayout(Dia);
   Dia_All->setSpacing(3);
-  Dia_All->setMargin(5);
+//  Dia_All->setMargin(5);
   
   QScrollArea *Dia_Scroll = new QScrollArea(Dia);
   //Dia_Scroll->setMargin(5);
   Dia_All->addWidget(Dia_Scroll);
   
   QVBoxLayout *Dia_Box = new QVBoxLayout(Dia_Scroll->viewport());
-  Dia_Scroll->insertChild(Dia_Box);
+//  Dia_Scroll->insertChild(Dia_Box);
+//  Dia_Scroll->setWidget(Dia_Box); CRTICAL-PRABHU
   QLabel *Dia_Label = new QLabel(tr("Change properties of\n")
                                + tr("these components ?"), Dia);
   Dia_All->addWidget(Dia_Label);
@@ -172,7 +174,8 @@ void ChangeDialog::slotButtReplace()
   // search through all components
   for(pc = Doc->Components->first(); pc!=0; pc = Doc->Components->next()) {
     if(matches(pc->Model)) {
-      if(Expr.search(pc->Name) >= 0)
+//      if(Expr.search(pc->Name) >= 0)
+        if(Expr.match(pc->Name).hasMatch())
         for(Property *pp = pc->Props.first(); pp!=0; pp = pc->Props.next())
           if(pp->Name == PropNameEdit->currentText()) {
             pb = new QCheckBox(pc->Name);
@@ -182,12 +185,12 @@ void ChangeDialog::slotButtReplace()
             i1 = pp->Description.indexOf('[');
             if(i1 < 0)  break;  // no multiple-choice property
 
-            i2 = pp->Description.findRev(']');
+            i2 = pp->Description.lastIndexOf(']');
             if(i2-i1 < 2)  break;
             str = pp->Description.mid(i1+1, i2-i1-1);
-            str.replace( QRegExp("[^a-zA-Z0-9_,]"), "" );
-            List = List.split(',',str);
-            if(List.findIndex(NewValueEdit->text()) >= 0)
+            str.replace( QRegularExpression("[^a-zA-Z0-9_,]"), "" );
+            List = str.split(',');
+            if(List.indexOf(NewValueEdit->text()) >= 0)
               break;    // property value is okay
 
             pb->setChecked(false);

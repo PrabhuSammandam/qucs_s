@@ -19,6 +19,7 @@
 #include <QRegExp>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
 
 #include "vafile.h"
 
@@ -61,12 +62,12 @@ VerilogA_File_Info::VerilogA_File_Info (QString File, bool isfile)
       File.remove(i, j-i+2);
   }
 
-  QRegExp Expr,Expr1;
-  Expr.setCaseSensitive(true);
-  Expr1.setCaseSensitive(true);
+  QRegularExpression Expr,Expr1;
+//  Expr.setCaseSensitivity(Qt::CaseSensitive);
+//  Expr1.setCaseSensitivity(Qt::CaseSensitive);
   k--;
   Expr.setPattern("\\bmodule\\b");  // start of last module
-  k = File.findRev(Expr, k);
+  k = File.lastIndexOf(Expr, k);
   if(k < 0)
     return;
 
@@ -101,9 +102,9 @@ VerilogA_File_Info::VerilogA_File_Info (QString File, bool isfile)
 // -------------------------------------------------------
 QString VerilogA_File_Info::parsePorts(QString s, int i)
 {
-  QRegExp Expr,Expr1;
-  Expr.setCaseSensitive(true);
-  Expr1.setCaseSensitive(true);
+  QRegularExpression Expr,Expr1;
+//  Expr.setCaseSensitive(true);
+//  Expr1.setCaseSensitive(true);
 
   int j;
   i = 0;    // remove all Verilog-A identifiers (e.g. "input")

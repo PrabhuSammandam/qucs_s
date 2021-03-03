@@ -20,6 +20,7 @@
 #include "diagrams/graph.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QFont>
 #include <QDebug>
 
@@ -55,9 +56,9 @@ void ViewPainter::init(QPainter *p, float Scale_, int DX_, int DY_,
   f.setPointSizeF( FontScale * float(f.pointSize()) );
   p->setFont(f);
   LineSpacing = p->fontMetrics().lineSpacing();
-  p-> setMatrixEnabled(false);   // we use our own coordinate transformation
+  p->setWorldMatrixEnabled(false);   // we use our own coordinate transformation
 
-  QPainter::RenderHints hints = 0;
+  QPainter::RenderHints hints = p->renderHints();
   // Ask to to antialias drawings if requested
   if (QucsSettings.GraphAntiAliasing) hints |= QPainter::Antialiasing;
   // Ask to antialias text if requested
@@ -288,7 +289,7 @@ void ViewPainter::drawRoundRect(int x1i, int y1i, int dxi, int dyi)
   dx = float(dxi)*Scale;
   dy = float(dyi)*Scale;
 
-  Painter->drawRoundRect(QRectF(x1, y1, dx, dy));
+  Painter->drawRoundedRect(QRectF(x1, y1, dx, dy), 0, 0);
 }
 
 // -------------------------------------------------------------

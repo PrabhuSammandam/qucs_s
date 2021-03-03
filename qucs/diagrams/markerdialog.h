@@ -17,6 +17,8 @@
 
 #ifndef MARKERDIALOG_H
 #define MARKERDIALOG_H
+
+#include <QtWidgets>
 #include "marker.h"
 #include <QDialog>
 

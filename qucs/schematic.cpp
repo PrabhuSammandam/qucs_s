@@ -19,12 +19,12 @@
 #include <limits.h>
 
 #include <QFileInfo>
-#include <QPrinter>
+//#include <QPrinter>
 #include <QPaintDevice>
 #include <QDir>
 #include <QTextStream>
 #include <QDragLeaveEvent>
-#include <Q3PtrList>
+#include "q3ptrlist.h"
 #include <QPixmap>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -85,6 +85,13 @@ Schematic::Schematic(QucsApp *App_, const QString& Name_)
   DocPaints.setAutoDelete(true);
   SymbolPaints.setAutoDelete(true);
 
+  Wires = &DocWires;
+  Nodes= &DocNodes;
+  Diagrams= &DocDiags;
+  Paintings= &DocPaints;
+  Components= &DocComps;
+
+
   // The 'i' means state for being unchanged.
   undoActionIdx = 0;
   undoAction.append(new QString(" i\n</>\n</>\n</>\n</>\n"));
@@ -102,7 +109,12 @@ Schematic::Schematic(QucsApp *App_, const QString& Name_)
 
   setVScrollBarMode(Q3ScrollView::AlwaysOn);
   setHScrollBarMode(Q3ScrollView::AlwaysOn);
-  viewport()->setPaletteBackgroundColor(QucsSettings.BGColor);
+
+  auto pp = viewport()->palette();
+  pp.setColor(viewport()->backgroundRole(), QucsSettings.BGColor );
+  viewport()->setPalette(pp);
+
+//  viewport()->setPaletteBackgroundColor(QucsSettings.BGColor);
   viewport()->setMouseTracking(true);
   viewport()->setAcceptDrops(true);  // enable drag'n drop
 
@@ -436,7 +448,7 @@ void Schematic::drawContents(QPainter *p, int, int, int, int)
       x = pn->cx;
       y = pn->cy + 4;
       z = pn->x1;
-      if(z & 1) x -= Painter.Painter->fontMetrics().width(pn->Name);
+      if(z & 1) x -= Painter.Painter->fontMetrics().horizontalAdvance(pn->Name);
       if(!(z & 2)) {
         y -= (Painter.LineSpacing>>1) + 4;
         if(z & 1) x -= 4;
@@ -729,7 +741,7 @@ void Schematic::paintSchToViewpainter(ViewPainter *p, bool printAll, bool toImag
         x = pn->cx;
         y = pn->cy + 4;
         z = pn->x1;
-        if(z & 1) x -= p->Painter->fontMetrics().width(pn->Name);
+        if(z & 1) x -= p->Painter->fontMetrics().horizontalAdvance(pn->Name);
         if(!(z & 2)) {
           y -= (p->LineSpacing>>1) + 4;
           if(z & 1) x -= 4;
@@ -1436,7 +1448,7 @@ int Schematic::adjustPortNumbers()
       VInfo = VHDL_File_Info (Name, true);
 
     if (!VInfo.PortNames.isEmpty())
-      Names = VInfo.PortNames.split(",", QString::SkipEmptyParts);
+      Names = VInfo.PortNames.split(",", Qt::SkipEmptyParts);
 
     for(pp = SymbolPaints.first(); pp!=0; pp = SymbolPaints.next())
       if(pp->Name == ".ID ") {
@@ -1444,11 +1456,11 @@ int Schematic::adjustPortNumbers()
 	id->Prefix = VInfo.EntityName.toUpper();
 	id->Parameter.clear();
 	if (!VInfo.GenNames.isEmpty())
-	  GNames = VInfo.GenNames.split(",", QString::SkipEmptyParts);
+      GNames = VInfo.GenNames.split(",", Qt::SkipEmptyParts);
 	if (!VInfo.GenTypes.isEmpty())
-	  GTypes = VInfo.GenTypes.split(",", QString::SkipEmptyParts);
+      GTypes = VInfo.GenTypes.split(",", Qt::SkipEmptyParts);
 	if (!VInfo.GenDefs.isEmpty())
-	  GDefs = VInfo.GenDefs.split(",", QString::SkipEmptyParts);;
+      GDefs = VInfo.GenDefs.split(",", Qt::SkipEmptyParts);;
 	for(Number = 1, it = GNames.begin(); it != GNames.end(); ++it) {
 	  id->Parameter.append(new SubParameter(
  	    true,
@@ -1496,7 +1508,7 @@ int Schematic::adjustPortNumbers()
     else
       VInfo = Verilog_File_Info (Name, true);
     if (!VInfo.PortNames.isEmpty())
-      Names = VInfo.PortNames.split(",", QString::SkipEmptyParts);
+      Names = VInfo.PortNames.split(",", Qt::SkipEmptyParts);
 
     for(pp = SymbolPaints.first(); pp!=0; pp = SymbolPaints.next())
       if(pp->Name == ".ID ") {
@@ -1543,7 +1555,7 @@ int Schematic::adjustPortNumbers()
       VInfo = VerilogA_File_Info (Name, true);
 
     if (!VInfo.PortNames.isEmpty())
-      Names = VInfo.PortNames.split(",", QString::SkipEmptyParts);
+      Names = VInfo.PortNames.split(",", Qt::SkipEmptyParts);
 
     for(pp = SymbolPaints.first(); pp!=0; pp = SymbolPaints.next())
       if(pp->Name == ".ID ") {
@@ -1882,11 +1894,13 @@ void Schematic::contentsWheelEvent(QWheelEvent *Event)
 {
   App->editText->setHidden(true);  // disable edit of component property
   // use smaller steps; typically the returned delta() is a multiple of 120
-  int delta = Event->delta() >> 1;
+  // int delta = Event->delta() >> 1;
+
+  int delta = Event->angleDelta().y() == 0 ? Event->angleDelta().x() : Event->angleDelta().y();
 
   // ...................................................................
   if((Event->modifiers() & Qt::ShiftModifier) ||
-     (Event->orientation() == Qt::Horizontal)) { // scroll horizontally ?
+     (Event->angleDelta().y() == 0/*Qt::Horizontal*/)) { // scroll horizontally ?
       if(delta > 0) { if(scrollLeft(delta)) scrollBy(-delta, 0); }
       else { if(scrollRight(delta)) scrollBy(-delta, 0); }
       viewport()->update(); // because QScrollView thinks nothing has changed
@@ -1899,8 +1913,8 @@ void Schematic::contentsWheelEvent(QWheelEvent *Event)
       float Scaling = pow(1.1, delta/60.0);
       zoom(Scaling);
       Scaling -= 1.0;
-      scrollBy( int(Scaling * float(Event->pos().x())),
-                int(Scaling * float(Event->pos().y())) );
+      scrollBy( int(Scaling * float(Event->position().x())),
+                int(Scaling * float(Event->position().y())) );
   }
   // ...................................................................
   else {     // scroll vertically !
@@ -1909,7 +1923,6 @@ void Schematic::contentsWheelEvent(QWheelEvent *Event)
       viewport()->update(); // because QScrollView thinks nothing has changed
       App->view->drawn = false;
   }
-
   Event->accept();   // QScrollView must not handle this event
 }
 
@@ -2078,7 +2091,7 @@ void Schematic::contentsDropEvent(QDropEvent *Event)
 
     // URI:  file:/home/linuxuser/Desktop/example.sch
     foreach(QUrl url, urls) {
-      App->gotoPage(QDir::convertSeparators(url.toLocalFile()));
+      App->gotoPage(QDir::toNativeSeparators(url.toLocalFile()));
     }
 
     d->DocChanged = changed;
@@ -2086,10 +2099,10 @@ void Schematic::contentsDropEvent(QDropEvent *Event)
   }
 
 
-  QMouseEvent e(QEvent::MouseButtonPress, Event->pos(),
+  QMouseEvent e(QEvent::MouseButtonPress, Event->position(),
                 Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-  int x = int(Event->pos().x()/Scale) + ViewX1;
-  int y = int(Event->pos().y()/Scale) + ViewY1;
+  int x = int(Event->position().x()/Scale) + ViewX1;
+  int y = int(Event->position().y()/Scale) + ViewY1;
 
   App->view->MPressElement(this, &e, x, y);
 
@@ -2103,6 +2116,7 @@ void Schematic::contentsDropEvent(QDropEvent *Event)
 // ---------------------------------------------------
 void Schematic::contentsDragEnterEvent(QDragEnterEvent *Event)
 {
+#if 0 // CRITICAL_PRABHU
   //FIXME: the function of drag library component seems not working?
   formerAction = 0;
   dragIsOkay = false;
@@ -2146,7 +2160,7 @@ void Schematic::contentsDragEnterEvent(QDragEnterEvent *Event)
       }
     }
   }
-
+#endif
   Event->ignore();
 }
 
@@ -2176,7 +2190,7 @@ void Schematic::contentsDragMoveEvent(QDragMoveEvent *Event)
       return;
     }
 
-    QMouseEvent e(QEvent::MouseMove, Event->pos(), Qt::NoButton, 
+    QMouseEvent e(QEvent::MouseMove, Event->position(), Qt::NoButton,
 		  Qt::NoButton, Qt::NoModifier);
     App->view->MMoveElement(this, &e);
   }

@@ -385,25 +385,31 @@ bool EllipseArc::Dialog()
   bool changed = false;
 
   FillDialog *d = new FillDialog(QObject::tr("Edit Arc Properties"), false);
-  d->ColorButt->setPaletteBackgroundColor(Pen.color());
+
+  auto tt = d->ColorButt->palette();
+  tt.setColor(d->ColorButt->backgroundRole(), Pen.color());
+  d->ColorButt->setPalette(tt);
+
+//  d->ColorButt->setPaletteBackgroundColor(Pen.color());
   d->LineWidth->setText(QString::number(Pen.width()));
-  d->StyleBox->setCurrentItem(Pen.style()-1);
+  d->StyleBox->setCurrentIndex(Pen.style()-1);
 
   if(d->exec() == QDialog::Rejected) {
     delete d;
     return false;
   }
 
-  if(Pen.color() != d->ColorButt->paletteBackgroundColor()) {
-    Pen.setColor(d->ColorButt->paletteBackgroundColor());
+  auto cc = d->ColorButt->palette().color(d->ColorButt->backgroundRole());
+  if(Pen.color() != cc) {
+    Pen.setColor(cc);
     changed = true;
   }
   if(Pen.width()  != d->LineWidth->text().toInt()) {
     Pen.setWidth(d->LineWidth->text().toInt());
     changed = true;
   }
-  if(Pen.style()  != (Qt::PenStyle)(d->StyleBox->currentItem()+1)) {
-    Pen.setStyle((Qt::PenStyle)(d->StyleBox->currentItem()+1));
+  if(Pen.style()  != (Qt::PenStyle)(d->StyleBox->currentIndex()+1)) {
+    Pen.setStyle((Qt::PenStyle)(d->StyleBox->currentIndex()+1));
     changed = true;
   }
 

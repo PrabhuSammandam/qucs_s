@@ -18,6 +18,7 @@
 #ifndef GRAPHICLINE_H
 #define GRAPHICLINE_H
 
+#include <QtWidgets>
 #include "painting.h"
 
 #include <QPen>

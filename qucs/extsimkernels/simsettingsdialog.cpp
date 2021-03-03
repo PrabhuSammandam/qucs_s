@@ -20,6 +20,7 @@
 # include <config.h>
 #endif
 
+#include <QtWidgets>
 #include "simsettingsdialog.h"
 #include "main.h"
 
@@ -50,7 +51,10 @@ SimSettingsDialog::SimSettingsDialog(QWidget *parent) :
     edtXycePar = new QLineEdit(QucsSettings.XyceParExecutable);
     edtSpiceOpus = new QLineEdit(QucsSettings.SpiceOpusExecutable);
     edtQucsator = new QLineEdit(QucsSettings.Qucsator);
-    spbNprocs = new QSpinBox(1,256,1,this);
+    spbNprocs = new QSpinBox(this);
+    spbNprocs->setMinimum(1);
+    spbNprocs->setMaximum(256);
+    spbNprocs->setSingleStep(1);
     spbNprocs->setValue(QucsSettings.NProcs);
     edtWorkdir = new QLineEdit(QucsSettings.S4Qworkdir);
     edtSimParam = new QLineEdit(QucsSettings.SimParameters);
@@ -232,9 +236,13 @@ void SimSettingsDialog::slotSetWorkdir()
 {
     QFileDialog dlg( this, tr("Select directory to store netlist and simulator output"), edtWorkdir->text() );
     dlg.setAcceptMode(QFileDialog::AcceptOpen);
-    dlg.setFileMode(QFileDialog::DirectoryOnly);
+    dlg.setFileMode(QFileDialog::Directory);
     if (dlg.exec()) {
-        QString s = dlg.selectedFile();
-        if (!s.isEmpty()) edtWorkdir->setText(s);
+        auto s = dlg.selectedFiles();
+        if(s.length() > 0 && !s[0].isEmpty())
+        {
+            edtWorkdir->setText(s[0]);
+        }
+//        if (!s.isEmpty()) edtWorkdir->setText(s);
     }
 }

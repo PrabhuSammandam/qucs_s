@@ -24,6 +24,8 @@
 #include "verilogawriter.h"
 #include <QPlainTextEdit>
 #include "paintings/id_text.h"
+#include <QRegExp>
+#include <QRegularExpression>
 
 /*!
   \file verilogawriter.cpp

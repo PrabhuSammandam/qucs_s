@@ -18,8 +18,8 @@
 #ifndef SPICEDIALOG_H
 #define SPICEDIALOG_H
 
+#include <QtWidgets>
 #include <QDialog>
-#include <QRegExp>
 
 class Schematic;
 class SpiceFile;
@@ -69,8 +69,8 @@ private:
   bool loadSpiceNetList(const QString&);
 
   QVBoxLayout *all;   // the mother of all widgets
-  QRegExpValidator  *Validator, *ValRestrict;
-  QRegExp     Expr;
+  QRegularExpressionValidator  *Validator, *ValRestrict;
+  QRegularExpression     Expr;
   QListWidget *NodesList, *PortsList;
   QCheckBox   *FileCheck, *SimCheck;
   QLineEdit   *FileEdit, *CompNameEdit;

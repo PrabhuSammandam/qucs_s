@@ -14,6 +14,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include <QtWidgets>
+
 #include <QLabel>
 #include <QLineEdit>
 #include <QValidator>
@@ -26,6 +28,7 @@
 #include <QStringList>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QRegularExpressionValidator>
 
 #include "digisettingsdialog.h"
 #include "textdoc.h"
@@ -39,10 +42,10 @@ DigiSettingsDialog::DigiSettingsDialog(TextDoc *Doc_)
   setWindowTitle(tr("Document Settings"));
 
   Expr.setPattern("[0-9][0-9a-zA-Z ]+"); // valid expression for LineEdit
-  Validator = new QRegExpValidator(Expr, this);
+  Validator = new QRegularExpressionValidator(Expr, this);
 
   QVBoxLayout *all = new QVBoxLayout(this);
-  all->setMargin(5);
+//  all->setMargin(5);
 
   QGroupBox *setGroup = new QGroupBox(tr("Digital Simulation Settings"));
   all->addWidget(setGroup);
@@ -68,8 +71,8 @@ DigiSettingsDialog::DigiSettingsDialog(TextDoc *Doc_)
 
   QRadioButton *comRadio = new QRadioButton(tr("Precompile Module"));
   group->addWidget(comRadio);
-  toggleGroup->insert(simRadio);
-  toggleGroup->insert(comRadio);
+  toggleGroup->addButton(simRadio);
+  toggleGroup->addButton(comRadio);
   connect(toggleGroup, SIGNAL(buttonClicked(int)), SLOT(slotChangeMode(int)));
 
   QHBoxLayout *hb3 = new QHBoxLayout();
@@ -141,7 +144,8 @@ void DigiSettingsDialog::slotOk()
     }
   }
   if(Doc->Libraries != LibEdit->text()) {
-    QStringList lst = QStringList::split(' ',LibEdit->text());
+//    QStringList lst = QStringList::split(' ',LibEdit->text());
+    QStringList lst = LibEdit->text().split(' ');
     Doc->Libraries = lst.join(" ");
     changed = true;
   }

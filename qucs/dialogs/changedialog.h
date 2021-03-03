@@ -18,6 +18,7 @@
 #ifndef CHANGEDIALOG_H
 #define CHANGEDIALOG_H
 
+#include <QtWidgets>
 #include <QDialog>
 #include <QRegExp>
 #include <QGridLayout>
@@ -43,8 +44,8 @@ private:
 
   Schematic *Doc;
   QGridLayout *all;   // the mother of all widgets
-  QRegExpValidator  *Validator, *ValRestrict;
-  QRegExp     Expr;
+  QRegularExpressionValidator  *Validator, *ValRestrict;
+  QRegularExpression     Expr;
   QLineEdit   *CompNameEdit, *NewValueEdit;
   QComboBox   *CompTypeEdit, *PropNameEdit;
 };

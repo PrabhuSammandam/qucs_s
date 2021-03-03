@@ -57,7 +57,7 @@ OptimizeDialog::OptimizeDialog(Optimize_Sim *c_, Schematic *d_)
   setWindowTitle(tr("Edit Optimization Properties"));
 
   Expr.setPattern("[\\w_]+");
-  Validator = new QRegExpValidator(Expr, this);
+  Validator = new QRegularExpressionValidator(Expr, this);
   numVal = new QDoubleValidator(this);
   intVal = new QIntValidator(this);
 
@@ -174,8 +174,8 @@ OptimizeDialog::OptimizeDialog(Optimize_Sim *c_, Schematic *d_)
       QStringList() << tr("Name") << tr("active") << tr("initial") << tr("min") << tr("max") << tr("Type"));
   VarTable->setSortingEnabled(false);
   VarTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-  VarTable->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-  VarTable->horizontalHeader()->setClickable(false); // no action when clicking on the header 
+  VarTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  VarTable->horizontalHeader()->setSectionsClickable(false); // no action when clicking on the header
 
   // right-click on the table header to open the context menu
   VarTable->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -327,7 +327,7 @@ OptimizeDialog::OptimizeDialog(Optimize_Sim *c_, Schematic *d_)
   // buttons on the bottom of the dialog (independent of the TabWidget)
   QHBoxLayout *Butts = new QHBoxLayout();
   Butts->setSpacing(3);
-  Butts->setMargin(3);
+//  Butts->setMargin(3);
 
   QPushButton *OkButt = new QPushButton(tr("OK"));
   connect(OkButt, SIGNAL(clicked()), SLOT(slotOK()));

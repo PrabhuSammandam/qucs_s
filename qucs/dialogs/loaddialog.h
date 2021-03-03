@@ -22,6 +22,7 @@
 #ifndef LOADDIALOG_H
 #define LOADDIALOG_H
 
+#include <QtWidgets>
 #include <QVariant>
 #include <QDialog>
 #include <QMap>

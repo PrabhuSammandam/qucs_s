@@ -63,7 +63,7 @@ QucsSettingsDialog::QucsSettingsDialog(QucsApp *parent)
     setWindowTitle(tr("Edit Qucs Properties"));
 
     Expr.setPattern("[\\w_]+");
-    Validator  = new QRegExpValidator(Expr, this);
+    Validator  = new QRegularExpressionValidator(Expr, this);
 
     all = new QVBoxLayout(this); // to provide the necessary size
     QTabWidget *t = new QTabWidget();
@@ -258,8 +258,8 @@ QucsSettingsDialog::QucsSettingsDialog(QucsApp *parent)
     item2->setText(tr("Program"));
 
     fileTypesTableWidget->horizontalHeader()->setStretchLastSection(true);
-    fileTypesTableWidget->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    fileTypesTableWidget->horizontalHeader()->setClickable(false); // no action when clicking on the header
+    fileTypesTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    fileTypesTableWidget->horizontalHeader()->setSectionsClickable(false); // no action when clicking on the header
     fileTypesTableWidget->verticalHeader()->hide();
     connect(fileTypesTableWidget, SIGNAL(cellClicked(int,int)), SLOT(slotTableClicked(int,int)));
     fileTypesGrid->addWidget(fileTypesTableWidget,1,0,3,1);
@@ -351,7 +351,7 @@ QucsSettingsDialog::QucsSettingsDialog(QucsApp *parent)
 
     pathsTableWidget->horizontalHeader()->setStretchLastSection(true);
     // avoid drawing header text in bold when some data is selected
-    pathsTableWidget->horizontalHeader()->setClickable(false);
+    pathsTableWidget->horizontalHeader()->setSectionsClickable(false);
 
     pathsTableWidget->verticalHeader()->hide();
     // allow multiple items to be selected
@@ -385,7 +385,7 @@ QucsSettingsDialog::QucsSettingsDialog(QucsApp *parent)
 
     QHBoxLayout *Butts = new QHBoxLayout();
     Butts->setSpacing(3);
-    Butts->setMargin(3);
+//    Butts->setMargin(3);
     all->addLayout(Butts);
 
     QPushButton *OkButt = new QPushButton(tr("OK"));

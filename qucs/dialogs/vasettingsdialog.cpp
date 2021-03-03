@@ -45,7 +45,7 @@ VASettingsDialog::VASettingsDialog (TextDoc * Doc_)
   QString Module = Doc->getModuleName ();
 
   Expr.setPattern("[0-9a-zA-Z /\\]+"); // valid expression for IconEdit
-  Validator = new QRegExpValidator (Expr, this);
+  Validator = new QRegularExpressionValidator (Expr, this);
 
   vLayout = new QVBoxLayout(this);
   
@@ -121,9 +121,11 @@ VASettingsDialog::VASettingsDialog (TextDoc * Doc_)
     mosRadio->setChecked (true);
   else
     nonRadio->setChecked (true);
-  all->addMultiCellWidget (nonRadio, 4, 4, 0, 1);
+  all->addWidget(nonRadio, 4, 0, 0, 1);
+//  all->addMultiCellWidget (nonRadio, 4, 4, 0, 1);
   all->addWidget (bjtRadio, 4, 2);
-  all->addMultiCellWidget (mosRadio, 4, 4, 3, 4);
+  all->addWidget(mosRadio, 4, 3, 0, 1);
+//  all->addMultiCellWidget (mosRadio, 4, 4, 3, 4);
 
   toggleGroupTyp = new QButtonGroup ();
   QRadioButton * anaRadio = 
@@ -141,9 +143,11 @@ VASettingsDialog::VASettingsDialog (TextDoc * Doc_)
     anaRadio->setChecked (true);
   else
     digRadio->setChecked (true);
-  all->addMultiCellWidget (anaRadio, 5, 5, 0, 1);
+  all->addWidget(anaRadio, 5, 0, 0, 1);
+//  all->addMultiCellWidget (anaRadio, 5, 5, 0, 1);
   all->addWidget (allRadio, 5, 2);
-  all->addMultiCellWidget (digRadio, 5, 5, 3, 4);
+  all->addWidget(digRadio, 5, 3, 0, 1);
+//  all->addMultiCellWidget (digRadio, 5, 5, 3, 4);
 
   QHBoxLayout * Buttons = new QHBoxLayout ();
   vbox->addLayout(Buttons);
@@ -206,15 +210,15 @@ void VASettingsDialog::slotOk ()
 
 void VASettingsDialog::slotBrowse ()
 {
-  QString s = QFileDialog::getOpenFileName (
+  QString s = QFileDialog::getOpenFileName (this,
+     tr("Enter an Icon File Name"),
      lastDir.isEmpty () ? QString (".") : lastDir,
      tr("PNG files")+" (*.png);;"+
-     tr("Any file")+" (*)",
-     this, 0, tr("Enter an Icon File Name"));
+     tr("Any file")+" (*)");
 
   if (!s.isEmpty ()) {
     QFileInfo Info (s);
-    lastDir = Info.dirPath (true);  // remember last directory
+    lastDir = Info.dir().path();  // remember last directory
     IconEdit->setText (s);
     IconButt->setPixmap (QPixmap (s));
   }

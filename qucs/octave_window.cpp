@@ -5,6 +5,7 @@
 #include "octave_window.h"
 #include "main.h"
 
+#include <QtWidgets>
 #include <QSize>
 #include <QColor>
 #include <QKeyEvent>
@@ -36,12 +37,19 @@ OctaveWindow::OctaveWindow(QDockWidget *parent_): QWidget()
   QWidget *all = new QWidget();
   QVBoxLayout *allLayout = new QVBoxLayout();
 
-  output = new QTextEdit(this);
+  output = new QPlainTextEdit(this);
   output->setReadOnly(true);
   output->setUndoRedoEnabled(false);
-  output->setTextFormat(Qt::LogText);
-  output->setLineWrapMode(QTextEdit::NoWrap);
-  output->setPaletteBackgroundColor(QucsSettings.BGColor);
+
+//  output->setTextFormat(Qt::LogText);
+
+  output->setLineWrapMode(QPlainTextEdit::NoWrap);
+
+//  output->setPaletteBackgroundColor(QucsSettings.BGColor);
+  QPalette palette;
+  palette.setColor(output->backgroundRole(), QucsSettings.BGColor);
+  output->setPalette(palette);
+
   allLayout->addWidget(output);
 
   input = new QLineEdit(this);
@@ -117,7 +125,7 @@ bool OctaveWindow::startOctave()
   octProcess.waitForStarted();
 
   if(octProcess.state()!=QProcess::Running) {
-    output->setText(tr("ERROR: Failed to execute \"%1\"").arg(Program));
+    output->appendPlainText(tr("ERROR: Failed to execute \"%1\"").arg(Program));
     return false;
   }
 
@@ -128,7 +136,7 @@ bool OctaveWindow::startOctave()
 // ------------------------------------------------------------------------
 void OctaveWindow::adjustDirectory()
 {
-  sendCommand("cd \"" + QucsSettings.QucsWorkDir.absPath() + "\"");
+  sendCommand("cd \"" + QucsSettings.QucsWorkDir.absolutePath() + "\"");
 }
 
 // ------------------------------------------------------------------------
@@ -136,19 +144,22 @@ void OctaveWindow::sendCommand(const QString& cmd)
 {
   //int par = output->paragraphs() - 1;
   //int idx = output->paragraphLength(par);
-  output->setTextColor(QColor(Qt::blue));
-  output->append(cmd);
+//  output->setTextColor(QColor(Qt::blue));
+  auto pallete = output->palette();
+  pallete.setColor(QPalette::Text, Qt::blue);
+  output->setPalette(pallete);
+  output->appendPlainText(cmd);
   QString cmdstr = cmd + "\n";
   //output->insertAt(cmdstr, par, idx);
   //output->scrollToBottom();
-  octProcess.write(cmdstr);
+  octProcess.write(cmdstr.toUtf8());
 }
 
 // ------------------------------------------------------------------------
 void OctaveWindow::runOctaveScript(const QString& name)
 {
   QFileInfo info(name);
-  sendCommand(info.baseName(true));
+  sendCommand(info.baseName());
 }
 
 // ------------------------------------------------------------------------
@@ -199,8 +210,11 @@ void OctaveWindow::slotDisplayMsg()
   //int idx = output->paragraphLength(par);
   //output->insertAt(QString(octProcess.readAllStandardOutput()), par, idx);
   //output->scrollToBottom();
-  output->setTextColor(QColor(Qt::black));
-  output->append(octProcess.readAllStandardOutput());
+//  output->setTextColor(QColor(Qt::black));
+  auto pallete = output->palette();
+  pallete.setColor(QPalette::Text, Qt::black);
+  output->setPalette(pallete);
+  output->appendPlainText(octProcess.readAllStandardOutput());
 }
 
 // ------------------------------------------------------------------------
@@ -214,8 +228,11 @@ void OctaveWindow::slotDisplayErr()
   //int idx = output->paragraphLength(par);
   //output->insertAt(QString(octProcess.readAllStandardError()), par, idx);
   //output->scrollToBottom();
-    output->setTextColor(QColor(Qt::red));
-    output->append(octProcess.readAllStandardError());
+//    output->set(QColor(Qt::red));
+    auto pallete = output->palette();
+    pallete.setColor(QPalette::Text, Qt::red);
+    output->setPalette(pallete);
+    output->appendPlainText(octProcess.readAllStandardError());
 }
 
 // ------------------------------------------------------------------------

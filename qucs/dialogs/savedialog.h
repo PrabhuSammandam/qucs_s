@@ -20,6 +20,8 @@
 #ifndef SAVEDIALOG_H
 #define SAVEDIALOG_H
 
+#include <QtWidgets>
+
 #include <QVariant>
 #include <QDialog>
 #include <QMap>
@@ -50,7 +52,7 @@ class SaveDialog : public QDialog
          SaveSelected
       };
             
-      SaveDialog(QWidget* p = 0, const char* n = 0, bool modal = true, Qt::WFlags fl = 0 );
+      SaveDialog(QWidget* p = 0, const char* n = 0, bool modal = true );
       ~SaveDialog();
       void addUnsavedDoc(QucsDoc *doc);
       void setApp(QucsApp *a);

@@ -158,7 +158,7 @@ void misc::str2num(const QString& s_, double& Number, QString& Unit, double& Fac
     }
   }*/
 
-  QRegExp Expr( QRegExp("[^0-9\\x2E\\x2D\\x2B]") );
+  QRegularExpression Expr( QRegularExpression("[^0-9\\x2E\\x2D\\x2B]") );
   int i = str.indexOf( Expr );
   if(i >= 0)
     if((str.at(i).toLatin1() | 0x20) == 'e') {
@@ -295,7 +295,7 @@ QString misc::properName(const QString& Name)
     s.chop(4);
   if(s.at(0) <= '9') if(s.at(0) >= '0')
     s = 'n' + s;
-  s.replace(QRegExp("\\W"), "_"); // none [a-zA-Z0-9] into "_"
+  s.replace(QRegularExpression("\\W"), "_"); // none [a-zA-Z0-9] into "_"
   s.replace("__", "_");  // '__' not allowed in VHDL
   if(s.at(0) == '_')
     s = 'n' + s;
@@ -435,7 +435,7 @@ VersionTriplet::VersionTriplet(const QString& version) {
   if (version.isEmpty()) {
     major = minor = patch = 0;
   } else {
-    QStringList vl = QStringList::split('.', version);
+    QStringList vl = version.split('.');
     major = vl.at(0).toUInt();
     minor = vl.at(1).toUInt();
     patch = vl.at(2).toUInt();

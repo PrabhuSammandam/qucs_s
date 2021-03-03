@@ -19,7 +19,7 @@
 #ifndef SIMSETTINGSDIALOG_H
 #define SIMSETTINGSDIALOG_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class SimSettingsDialog : public QDialog
 {

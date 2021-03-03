@@ -700,14 +700,14 @@ int Rect3DDiagram::calcAxis(Axis *Axis, int x, int y,
       
       tmp = misc::StringNiceNum(yD);
       if(Axis->up < 0.0)  tmp = '-'+tmp;
-      w = metrics.width(tmp);  // width of text
+      w = metrics.horizontalAdvance(tmp);  // width of text
       if(maxWidth < w) maxWidth = w;
       
       xLen = int(ystepD * cos(phi) + 0.5) + x;
       yLen = int(ystepD * sin(phi) + 0.5) + y;
-      if(Qt::DockRight)
-	Texts.append(new Text(xLen+3+gx, yLen-6+gy, tmp));
-      else
+//      if(Qt::DockRight)
+//	Texts.append(new Text(xLen+3+gx, yLen-6+gy, tmp));
+//      else
 	Texts.append(new Text(xLen-w-2-gx, yLen-6-gy, tmp));
       
       // short grid marks
@@ -736,11 +736,11 @@ int Rect3DDiagram::calcAxis(Axis *Axis, int x, int y,
       if(fabs(GridNum) < 0.01*pow(10.0, Expo)) GridNum = 0.0; // make 0 really 0
       tmp = misc::StringNiceNum(GridNum);
       
-      w = metrics.width(tmp);  // width of text
+      w = metrics.horizontalAdvance(tmp);  // width of text
       if(maxWidth < w) maxWidth = w;
-      if(Qt::DockRight)
-	Texts.append(new Text(x+3+gx, y-6+gy, tmp)); // place text right
-      else
+//      if(Qt::DockRight)
+//	Texts.append(new Text(x+3+gx, y-6+gy, tmp)); // place text right
+//      else
 	Texts.append(new Text(x-w-2-gx, y-6-gy, tmp)); // place left
       GridNum += GridStep;
       
@@ -774,7 +774,7 @@ void Rect3DDiagram::createAxis(Axis *Axis, bool Right,
   cos_phi = sqrt(double(x*x) + double(y*y));
   phi = atan2(double(y), double(x));
   
-  valid = calcAxis(Axis, x1_, y1_, cos_phi, phi, Qt::DockRight); // axis numbering
+  valid = calcAxis(Axis, x1_, y1_, cos_phi, phi, /*Qt::DockRight*/0); // axis numbering
   z = (int)cos_phi;
   cos_phi = cos(phi);
   sin_phi = sin(phi);
@@ -805,7 +805,7 @@ void Rect3DDiagram::createAxis(Axis *Axis, bool Right,
       }
       x += int(double(metrics.lineSpacing())*sin_phi);
       y -= int(double(metrics.lineSpacing())*cos_phi);
-      w = metrics.width(s);
+      w = metrics.horizontalAdvance(s);
       Texts.append(new Text(x+int(double((z-w)>>1)*cos_phi),
                             y+int(double((z-w)>>1)*sin_phi),
                             s, pg->Color, 12.0, cos_phi, sin_phi));
@@ -814,7 +814,7 @@ void Rect3DDiagram::createAxis(Axis *Axis, bool Right,
   else {
     x += int(double(metrics.lineSpacing())*sin_phi);
     y -= int(double(metrics.lineSpacing())*cos_phi);
-    w = metrics.width(Axis->Label);
+    w = metrics.horizontalAdvance(Axis->Label);
     Texts.append(new Text(x+int(double((z-w)>>1)*cos_phi),
                           y+int(double((z-w)>>1)*sin_phi),
                           Axis->Label, Qt::black, 12.0, cos_phi, sin_phi));

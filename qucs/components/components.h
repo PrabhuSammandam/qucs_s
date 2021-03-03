@@ -187,7 +187,7 @@
 #include "ecvs.h"
 
 // Verilog-A dynamicaly loaded component
-#include "vacomponent.h"
+//#include "vacomponent.h"
 
 #include "bsim3v34nMOS.h"
 #include "bsim3v34pMOS.h"

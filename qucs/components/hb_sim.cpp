@@ -25,7 +25,7 @@ HB_Sim::HB_Sim()
   Description = QObject::tr("Harmonic balance simulation");
 
   QString  s = Description;
-  int a = s.findRev(" ");
+  int a = s.lastIndexOf(" ");
   if (a != -1) s[a] = '\n';    // break line before the word "simulation"
 
   Texts.append(new Text(0, 0, s.left(a), Qt::darkBlue, QucsSettings.largeFontSize));
@@ -79,7 +79,7 @@ QString HB_Sim::spice_netlist(bool isXyce)
     QString s="";
     if (isXyce) {  // Only in Xyce
         s += QString(".options hbint numfreq=%1 STARTUPPERIODS=2\n").arg(Props.at(1)->Value);
-        QStringList freqs = Props.at(0)->Value.split(QRegExp("\\s+(?=[0-9])"));
+        QStringList freqs = Props.at(0)->Value.split(QRegularExpression("\\s+(?=[0-9])"));
         // split frequencyes list by space before digit
         for (QStringList::iterator it = freqs.begin();it != freqs.end(); it++) {
             (*it) = spicecompat::normalize_value(*it);

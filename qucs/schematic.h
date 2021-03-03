@@ -35,8 +35,8 @@
 #include "paintings/painting.h"
 #include "components/component.h"
 
-#include <Q3ScrollView>
-#include <Q3PtrList>
+#include "q3scrollview.h"
+#include "q3ptrlist.h"
 #include <QVector>
 #include <QStringList>
 #include <QFileInfo>
@@ -127,11 +127,11 @@ public:
 
   // The pointers points to the current lists, either to the schematic
   // elements "Doc..." or to the symbol elements "SymbolPaints".
-  Q3PtrList<Wire>      *Wires, DocWires;
-  Q3PtrList<Node>      *Nodes, DocNodes;
-  Q3PtrList<Diagram>   *Diagrams, DocDiags;
-  Q3PtrList<Painting>  *Paintings, DocPaints;
-  Q3PtrList<Component> *Components, DocComps;
+  Q3PtrList<Wire>      *Wires = nullptr, DocWires;
+  Q3PtrList<Node>      *Nodes= nullptr, DocNodes;
+  Q3PtrList<Diagram>   *Diagrams= nullptr, DocDiags;
+  Q3PtrList<Painting>  *Paintings= nullptr, DocPaints;
+  Q3PtrList<Component> *Components= nullptr, DocComps;
 
   Q3PtrList<Painting>  SymbolPaints;  // symbol definition for subcircuit
 

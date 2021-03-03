@@ -16,7 +16,9 @@
  ***************************************************************************/
 
 #ifndef GRAPHICTEXTDIALOG_H
-#define GRAPHICTEXTDIALOG_H
+#define GRAPHICTEXTD
+
+#include <QtWidgets>
 
 #include <QDialog>
 
@@ -40,7 +42,7 @@ private slots:
 public:
   QLineEdit   *TextSize, *Angle;
   QPushButton *ColorButt;
-  QTextEdit   *text;
+  QPlainTextEdit   *text;
 
 private:
   QVBoxLayout *vert;

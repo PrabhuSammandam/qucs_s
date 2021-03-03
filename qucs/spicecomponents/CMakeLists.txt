@@ -1,7 +1,16 @@
 # qucs/componenets library
 
+add_compile_definitions(${Qt6Widgets_COMPILE_DEFINITIONS}
+  ${Qt6Core5Compat_COMPILE_DEFINITIONS}
+  ${Qt6Core_COMPILE_DEFINITIONS}
+  ${Qt6Gui_COMPILE_DEFINITIONS})
+
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}
-                     ${CMAKE_CURRENT_SOURCE_DIR} )
+                     ${CMAKE_CURRENT_SOURCE_DIR}
+                     ${Qt6Widgets_INCLUDE_DIRS}
+                     ${Qt6Core5Compat_INCLUDE_DIRS}
+                     ${Qt6Core_INCLUDE_DIRS}
+                     ${Qt6Gui_INCLUDE_DIRS})
 
 #INCLUDES = $(X11_INCLUDES) $(QT_INCLUDES) -I$(top_srcdir)/qucs
 

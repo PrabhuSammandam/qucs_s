@@ -143,7 +143,7 @@ void VHDL_File::createSymbol()
   Lines.append(new Line(-HALFWIDTH, -h,-HALFWIDTH,  h,QPen(Qt::darkBlue,2)));
 
   tmp = QObject::tr("vhdl");
-  int w = metrics.width(tmp);
+  int w = metrics.horizontalAdvance(tmp);
   Texts.append(new Text(w/-2, fHeight/-2, tmp));
 
   int y = 15-h, i = 0;
@@ -154,7 +154,7 @@ void VHDL_File::createSymbol()
     Ports.append(pp);
     pp->Type = TypeNames.section(',', i, i);
     tmp = PortNames.section(',', i, i);
-    w = metrics.width(tmp);
+    w = metrics.horizontalAdvance(tmp);
     Texts.append(new Text(-19-w, y-fHeight-2, tmp));
     i++;
 
@@ -280,8 +280,8 @@ VHDL_File_Info::VHDL_File_Info(QString File, bool isfile)
       File.remove(i, j-i);
   }
 
-  QRegExp Expr;
-  Expr.setCaseSensitivity(Qt::CaseInsensitive); 
+  QRegularExpression Expr{"", QRegularExpression::CaseInsensitiveOption};
+//  Expr.setCaseSensitivity(Qt::CaseInsensitive);
   for(;;) {
     k--;
     Expr.setPattern("\\bentity\\b");  // start of last entity
@@ -325,8 +325,8 @@ VHDL_File_Info::VHDL_File_Info(QString File, bool isfile)
 // -------------------------------------------------------
 QString VHDL_File_Info::parsePorts(QString s, int j)
 {
-  QRegExp Expr;
-  Expr.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegularExpression Expr{"", QRegularExpression::CaseInsensitiveOption};
+//  Expr.setCaseSensitivity(Qt::CaseInsensitive);
   int i, p, l, k;
 
   Expr.setPattern("\\bport\\b");  // start of interface definition
@@ -388,8 +388,8 @@ QString VHDL_File_Info::parsePorts(QString s, int j)
 // -------------------------------------------------------
 QString VHDL_File_Info::parseGenerics(QString s, int j)
 {
-  QRegExp Expr;
-  Expr.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegularExpression Expr{"", QRegularExpression::CaseInsensitiveOption};
+//  Expr.setCaseSensitivity(Qt::CaseInsensitive);
   int i, p, l, k, n;
 
   Expr.setPattern("\\bgeneric\\b");

@@ -6,13 +6,15 @@
 #ifndef OCTAVE_WINDOW_H
 #define OCTAVE_WINDOW_H
 
+#include <QtWidgets>
+
 #include <QWidget>
 #include <QProcess>
 #include <QStringList>
 
 class QEvent;
 class QDockWidget;
-class QTextEdit;
+class QPlainTextEdit;
 class QLineEdit;
 
 
@@ -38,7 +40,7 @@ protected:
   bool eventFilter(QObject *obj, QEvent *event);
 
 private:
-  QTextEdit *output;
+  QPlainTextEdit *output;
   QProcess octProcess;
   QLineEdit *input;
   QStringList cmdHistory;

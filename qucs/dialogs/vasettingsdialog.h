@@ -17,7 +17,7 @@
 
 #ifndef VASETTINGSDIALOG_H
 #define VASETTINGSDIALOG_H
-
+#include <QtWidgets>
 #include <QDialog>
 #include <QRegExp>
 #include <QLabel>
@@ -50,8 +50,8 @@ private slots:
 
 private:
   TextDoc * Doc;
-  QRegExp Expr;
-  QRegExpValidator * Validator;
+  QRegularExpression Expr;
+  QRegularExpressionValidator * Validator;
   QVBoxLayout *vLayout;
 };
 

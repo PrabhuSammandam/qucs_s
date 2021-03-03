@@ -1,6 +1,10 @@
 #include "spicecompat.h"
 #include "main.h"
 
+#include <QRegExp>
+#include <QRegularExpression>
+
+
 /*!
  * \brief spicecompat::check_refdes If starting letters of the component name
  *        match spice model (i.e. R1, C1, L1)returns Name. Otherwise function
@@ -270,8 +274,8 @@ int spicecompat::getPins(const QString &file, const QString &compname, QStringLi
         QString lin = stream.readLine();
         QRegExp subckt_header("^\\s*\\.(S|s)(U|u)(B|b)(C|c)(K|k)(T|t)\\s.*");
         if (subckt_header.exactMatch(lin)) {
-            QRegExp sep("\\s");
-            QStringList lst2 = lin.split(sep,QString::SkipEmptyParts);
+            QRegularExpression sep("\\s");
+            QStringList lst2 = lin.split(sep,Qt::SkipEmptyParts);
             QString name = lin.section(sep,1,1,QString::SectionSkipEmpty).toLower();
             QString refname = compname.toLower();
             if (name != refname) continue;
@@ -303,7 +307,7 @@ QString spicecompat::getSubcktName(QString subfilename)
         foreach (QString str, lst) {
             QRegExp subckt_header("^\\s*\\.(S|s)(U|u)(B|b)(C|c)(K|k)(T|t)\\s.*");
             if (subckt_header.exactMatch(str)) {
-                QRegExp sep("\\s");
+                QRegularExpression sep("\\s");
                 s = str.section(sep,1,1,QString::SectionSkipEmpty);
                 break;
             }

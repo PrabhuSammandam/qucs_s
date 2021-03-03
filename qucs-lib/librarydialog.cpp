@@ -42,11 +42,11 @@ LibraryDialog::LibraryDialog(QWidget *App_) : QDialog(App_)
   setWindowTitle(tr("Manage User Libraries"));
 
   Expr.setPattern("[\\w_]+");
-  Validator = new QRegExpValidator(Expr, this);
+  Validator = new QRegularExpressionValidator(Expr, this);
 
   // ...........................................................
   QVBoxLayout *all = new QVBoxLayout(this);
-  all->setMargin(5);
+//  all->setMargin(5);
   all->setSpacing(6);
 
   Group = new QGroupBox(tr("Choose library:"), this);

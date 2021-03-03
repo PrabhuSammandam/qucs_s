@@ -17,6 +17,8 @@
 #ifndef TEXTBOXDIALOG_H
 #define TEXTBOXDIALOG_H
 
+#include <QtWidgets>
+
 #include "components/component.h"
 #include <QtGui>
 

@@ -97,7 +97,7 @@ void MStee::createSymbol()
 
   if(Props.getLast()->Value.at(0) != 'n') {
     QString stmp = "1"; 
-    int w = smallmetrics.width(stmp);
+    int w = smallmetrics.horizontalAdvance(stmp);
     int d = smallmetrics.descent();
     int a = smallmetrics.ascent();
     

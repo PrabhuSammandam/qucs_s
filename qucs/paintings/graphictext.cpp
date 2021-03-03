@@ -51,10 +51,14 @@ void GraphicText::paint(ViewPainter *p)
   // keep track of painter state
   p->Painter->save();
 
-  QMatrix wm = p->Painter->worldMatrix();
-  QMatrix Mat(1.0, 0.0, 0.0, 1.0, p->DX + float(cx) * p->Scale,
-				   p->DY + float(cy) * p->Scale);
-  p->Painter->setWorldMatrix(Mat);
+  auto oldWorldTransform = p->Painter->worldTransform();
+  QTransform Mat(1.0,
+              0.0,
+              0.0,
+              1.0,
+              p->DX + float(cx) * p->Scale,
+              p->DY + float(cy) * p->Scale);
+  p->Painter->setWorldTransform(Mat);
   p->Painter->rotate(-Angle);   // automatically enables transformation
 
   int Size = Font.pointSize();
@@ -77,7 +81,7 @@ void GraphicText::paint(ViewPainter *p)
   }
 
   Font.setPointSize(Size);   // restore real font size
-  p->Painter->setWorldMatrix(wm);
+  p->Painter->setWorldTransform(oldWorldTransform);
   p->Painter->setWorldMatrixEnabled(false);
 
   // restore painter state
@@ -333,7 +337,7 @@ bool GraphicText::Dialog()
   d->Angle->setText(QString::number(Angle));
   QString _Text = Text;
   decode_String(_Text);  // replace special characters with LaTeX commands
-  d->text->setText(_Text);
+  d->text->appendPlainText(_Text);
 
   if(d->exec() == QDialog::Rejected) {
     delete d;

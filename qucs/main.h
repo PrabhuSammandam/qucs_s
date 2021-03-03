@@ -31,6 +31,7 @@
 #include "node.h"
 #include "diagrams/diagram.h"
 #include "extsimkernels/spicecompat.h"
+#include <QRegExp>
 
 class QucsApp;
 class Component;

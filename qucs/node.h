@@ -20,7 +20,7 @@
 
 #include "element.h"
 
-#include <Q3PtrList>
+#include "q3ptrlist.h"
 
 class ViewPainter;
 

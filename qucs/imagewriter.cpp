@@ -20,6 +20,7 @@
  *
  */
 
+#if 0
 #include "schematic.h"
 #include "imagewriter.h"
 #include "dialogs/exportdialog.h"
@@ -402,3 +403,4 @@ void ImageWriter::updateMinMax(int &xmin, int &xmax, int &ymin, int &ymax,
     int d4 = std::max(y2,y1);
     if (d4>ymax) ymax = d4;
 }
+#endif

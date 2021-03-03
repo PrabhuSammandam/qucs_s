@@ -131,7 +131,7 @@ void Verilog_File::createSymbol()
   Lines.append(new Line(-HALFWIDTH, -h,-HALFWIDTH,  h,QPen(Qt::darkBlue,2)));
 
   tmp = QObject::tr("verilog");
-  int w = metrics.width(tmp);
+  int w = metrics.horizontalAdvance(tmp);
   Texts.append(new Text(w/-2, fHeight/-2, tmp));
 
 
@@ -140,7 +140,7 @@ void Verilog_File::createSymbol()
     Lines.append(new Line(-30,  y,-HALFWIDTH,  y,QPen(Qt::darkBlue,2)));
     Ports.append(new Port(-30,  y));
     tmp = PortNames.section(',', i, i);
-    w = metrics.width(tmp);
+    w = metrics.horizontalAdvance(tmp);
     Texts.append(new Text(-26-w, y-fHeight-2, tmp));
     i++;
 
@@ -241,9 +241,9 @@ Verilog_File_Info::Verilog_File_Info(QString File, bool isfile)
       File.remove(i, j-i+2);
   }
 
-  QRegExp Expr,Expr1;
-  Expr.setCaseSensitivity(Qt::CaseSensitive);
-  Expr1.setCaseSensitivity(Qt::CaseSensitive);
+  QRegularExpression Expr,Expr1;
+//  Expr.setCaseSensitivity(Qt::CaseSensitive);
+//  Expr1.setCaseSensitivity(Qt::CaseSensitive);
   k--;
   Expr.setPattern("\\bmodule\\b");  // start of last module
   k = File.lastIndexOf(Expr, k);
@@ -281,9 +281,9 @@ Verilog_File_Info::Verilog_File_Info(QString File, bool isfile)
 // -------------------------------------------------------
 QString Verilog_File_Info::parsePorts(QString s, int i)
 {
-  QRegExp Expr,Expr1;
-  Expr.setCaseSensitivity(Qt::CaseSensitive);
-  Expr1.setCaseSensitivity(Qt::CaseSensitive);
+  QRegularExpression Expr,Expr1;
+//  Expr.setCaseSensitivity(Qt::CaseSensitive);
+//  Expr1.setCaseSensitivity(Qt::CaseSensitive);
 
   int j;
   i = 0;    // remove all Verilog identifiers (e.g. "input")

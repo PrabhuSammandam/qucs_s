@@ -18,6 +18,8 @@
 #ifndef SWEEPDIALOG_H
 #define SWEEPDIALOG_H
 
+#include <QtWidgets>
+
 #include <QDialog>
 #include <QRegExp>
 #include <QList>

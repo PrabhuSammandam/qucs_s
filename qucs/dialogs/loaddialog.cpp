@@ -27,9 +27,9 @@
 #include <QScrollArea>
 #include <QDebug>
 #include <QFileDialog>
-#include <QScriptEngine>
-#include <QScriptValue>
-#include <QScriptValueIterator>
+//#include <QScriptEngine>
+//#include <QScriptValue>
+//#include <QScriptValueIterator>
 #include <QGroupBox>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -62,7 +62,7 @@ void LoadDialog::setApp(QucsApp *a)
 void LoadDialog::initDialog()
 {
    QVBoxLayout *all = new QVBoxLayout(this);
-   all->setMargin(5);
+//   all->setMargin(5);
    all->setSpacing(6);
 
    // hold group of files / group icon and checkboxes
@@ -200,9 +200,9 @@ void LoadDialog::slotSymbolFileClicked(QListWidgetItem* item)
 
   // Just need path to bitmap, do not create an object
   QString Name, vaBitmap;
-  Component * c = (Component *)
-          vacomponent::info (Name, vaBitmap, false, JSON);
-  if (c) delete c;
+
+//  Component * c = (Component *) vacomponent::info (Name, vaBitmap, false, JSON);
+//  if (c) delete c;
 
 //  qDebug() << "slotSymbolFileClicked" << Name << vaBitmap;
 
@@ -296,10 +296,10 @@ void LoadDialog::slotChangeIcon()
       if (line.contains("BitmapFile")){
           QString change =
                   QString("  \"BitmapFile\" : \"%1\",").arg(newIcon);
-          ba.append(change+"\n");
+          ba.append((change+"\n").toUtf8());
       }
       else{
-          ba.append(line+"\n");
+          ba.append((line+"\n").toUtf8());
       }
     }
   }

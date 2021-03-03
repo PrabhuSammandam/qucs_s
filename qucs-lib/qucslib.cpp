@@ -116,7 +116,7 @@ QucsLib::QucsLib()
     all = new QVBoxLayout();
     main->setLayout(all);
     all->setSpacing (0);
-    all->setMargin (0);
+//    all->setMargin (0);
 
 
     // library and component choice

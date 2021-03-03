@@ -20,6 +20,7 @@
  *
  */
 
+#if 0
 #include "printerwriter.h"
 #include "schematic.h"
 #include "textdoc.h"
@@ -129,3 +130,4 @@ PrinterWriter::print(QWidget *doc)
   }
   delete dialog;
 }
+#endif

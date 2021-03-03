@@ -56,11 +56,11 @@ ComponentDialog::ComponentDialog(Component *c, Schematic *d)
   ValInteger = new QIntValidator(1, 1000000, this);
 
   Expr.setPattern("[^\"=]*");  // valid expression for property 'edit'
-  Validator = new QRegExpValidator(Expr, this);
+  Validator = new QRegularExpressionValidator(Expr, this);
   Expr.setPattern("[^\"]*");   // valid expression for property 'edit'
-  Validator2 = new QRegExpValidator(Expr, this);
+  Validator2 = new QRegularExpressionValidator(Expr, this);
   Expr.setPattern("[\\w_\\.\\(\\) @:\\[\\]]+");  // valid expression for property 'NameEdit'. Space to enable Spice-style par sweep
-  ValRestrict = new QRegExpValidator(Expr, this);
+  ValRestrict = new QRegularExpressionValidator(Expr, this);
 
   checkSim  = 0;  comboSim  = 0;  comboType  = 0;  checkParam = 0;
   editStart = 0;  editStop = 0;  editNumber = 0;
@@ -311,8 +311,8 @@ ComponentDialog::ComponentDialog(Component *c, Schematic *d)
   prop->horizontalHeader()->setStretchLastSection(true);
   // set automatic resize so all content will be visible, 
   //  horizontal scrollbar will appear if table becomes too large
-  prop->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-  prop->horizontalHeader()->setClickable(false); // no action when clicking on the header 
+  prop->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  prop->horizontalHeader()->setSectionsClickable(false); // no action when clicking on the header
 
   connect(prop->horizontalHeader(),SIGNAL(sectionDoubleClicked(int)),
               this, SLOT(slotHHeaderClicked(int)));
@@ -661,15 +661,15 @@ void ComponentDialog::slotSelectProperty(QTableWidgetItem *item)
     int e = desc.lastIndexOf(']');
     if (e-b > 2) {
       QString str = desc.mid(b+1, e-b-1);
-      str.replace( QRegExp("[^a-zA-Z0-9_,]"), "" );
+      str.replace( QRegularExpression("[^a-zA-Z0-9_,]"), "" );
       List = str.split(',');
       qDebug() << "List = " << List;
     }
 
     // use the screen-compatible metric
     QFontMetrics metrics(QucsSettings.font, 0);   // get size of text
-    qDebug() << "desc = " << desc << metrics.width(desc);
-    while(metrics.width(desc) > 270) {  // if description too long, cut it nicely
+    qDebug() << "desc = " << desc << metrics.horizontalAdvance(desc);
+    while(metrics.horizontalAdvance(desc) > 270) {  // if description too long, cut it nicely
       // so 270 above will be the maximum size of the name label and associated edit line widget 
       if (desc.lastIndexOf(' ') != -1)
         desc = desc.left(desc.lastIndexOf(' ')) + "....";

@@ -111,7 +111,7 @@ void XspiceGeneric::createSymbol()
     Ports.append(new Port(-40,  y));
     // tmp = PortNames.section(',', i, i).mid(4);
     tmp = n_ports.at(i);
-    w = smallmetrics.width(tmp);
+    w = smallmetrics.horizontalAdvance(tmp);
     Texts.append(new Text(-40-w, y-fHeight-2, tmp)); // text right-aligned
     i++;
 

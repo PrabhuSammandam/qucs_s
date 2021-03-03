@@ -21,6 +21,8 @@
 #include "qucs2spice.h"
 #include "spicecompat.h"
 #include "components/equation.h"
+#include <QRegExp>
+#include <QRegularExpression>
 
 /*!
   \file qucs2spice.cpp
@@ -85,7 +87,7 @@ QString qucs2spice::convert_netlist(QString netlist, bool xyce)
 
     foreach(QString line,net_lst) {  // Find equations
         if (eqn_pattern.exactMatch(line)) {
-            line.remove(QRegExp("^[ \t]*Eqn:[A-Za-z]+\\w+\\s+"));
+            line.remove(QRegularExpression("^[ \t]*Eqn:[A-Za-z]+\\w+\\s+"));
             ExtractVarsAndValues(line,EqnsAndVars);
         }
     }
@@ -123,7 +125,7 @@ QString qucs2spice::convert_netlist(QString netlist, bool xyce)
 QString qucs2spice::convert_rcl(QString line)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString s1 = lst.takeFirst();
     s += s1.remove(':');
     s += " " + lst.takeFirst();
@@ -139,7 +141,7 @@ QString qucs2spice::convert_header(QString line)
 {
     QString s = line;
     s.replace(".Def:",".SUBCKT ");
-    QStringList lst = s.split(' ',QString::SkipEmptyParts);
+    QStringList lst = s.split(' ',Qt::SkipEmptyParts);
     lst.insert(2," gnd "); // ground
     s = lst.join(" ");
     s += "\n";
@@ -149,7 +151,7 @@ QString qucs2spice::convert_header(QString line)
 QString qucs2spice::convert_diode(QString line,bool xyce)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString name = lst.takeFirst();
     int idx = name.indexOf(':');
     name =  name.right(name.count()-idx-1); // name
@@ -166,7 +168,7 @@ QString qucs2spice::convert_diode(QString line,bool xyce)
 QString qucs2spice::convert_mosfet(QString line, bool xyce)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString name = lst.takeFirst();
     int idx = name.indexOf(':');
     name =  name.right(name.count()-idx-1); // name
@@ -208,7 +210,7 @@ QString qucs2spice::convert_mosfet(QString line, bool xyce)
 QString qucs2spice::convert_jfet(QString line, bool xyce)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString name = lst.takeFirst();
     int idx = name.indexOf(':');
     name =  name.right(name.count()-idx-1); // name
@@ -239,7 +241,7 @@ QString qucs2spice::convert_jfet(QString line, bool xyce)
 QString qucs2spice::convert_bjt(QString line)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString name = lst.takeFirst();
     int idx = name.indexOf(':');
     name =  name.right(name.count()-idx-1); // name
@@ -289,7 +291,7 @@ QString qucs2spice::convert_ccvs(QString line)
 
 QString qucs2spice::convert_ccs(QString line, bool voltage)
 {
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString name = lst.takeFirst();
     int idx = name.indexOf(':');
     name =  name.right(name.count()-idx-1); // name
@@ -321,7 +323,7 @@ QString qucs2spice::convert_vcvs(QString line)
 
 QString qucs2spice::convert_vcs(QString line,bool voltage)
 {
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString name = lst.takeFirst();
     int idx = name.indexOf(':');
     name =  name.right(name.count()-idx-1); // name
@@ -344,7 +346,7 @@ QString qucs2spice::convert_vcs(QString line,bool voltage)
 QString qucs2spice::convert_dc_src(QString line)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString s1 = lst.takeFirst();
     s += s1.remove(':');
     s += " " + lst.takeFirst();
@@ -359,7 +361,7 @@ QString qucs2spice::convert_dc_src(QString line)
 QString qucs2spice::convert_edd(QString line, QStringList &EqnsAndVars)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QStringList nods;
     QString nam = lst.takeFirst().remove(':');
 
@@ -404,7 +406,7 @@ QString qucs2spice::convert_edd(QString line, QStringList &EqnsAndVars)
 QString qucs2spice::convert_subckt(QString line)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString s1 = lst.takeFirst();
     s += "X" + s1.remove("Sub:") + " gnd ";
 
@@ -438,7 +440,7 @@ QString qucs2spice::convert_subckt(QString line)
 QString qucs2spice::convert_gyrator(QString line)
 {
     QString s="";
-    QStringList lst = line.split(" ",QString::SkipEmptyParts);
+    QStringList lst = line.split(" ",Qt::SkipEmptyParts);
     QString Name = lst.takeFirst();
     Name = Name.section(':',1,1);
     QString n1 = lst.takeFirst();

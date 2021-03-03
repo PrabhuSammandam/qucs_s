@@ -18,9 +18,12 @@
 #ifndef DIGISETTINGSDIALOG_H
 #define DIGISETTINGSDIALOG_H
 
+#include <QtWidgets>
+
 #include <QDialog>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QLabel>
+#include <QRegularExpressionValidator>
 
 class TextDoc;
 class QLineEdit;
@@ -47,8 +50,8 @@ private slots:
 
 private:
   TextDoc *Doc;
-  QRegExp Expr;
-  QRegExpValidator *Validator;
+  QRegularExpression Expr;
+  QRegularExpressionValidator *Validator;
 };
 
 #endif

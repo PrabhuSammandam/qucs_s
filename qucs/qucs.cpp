@@ -72,7 +72,7 @@
 //#include "dialogs/vtabbeddockwidget.h"
 #include "extsimkernels/externsimdialog.h"
 #include "octave_window.h"
-#include "printerwriter.h"
+//#include "printerwriter.h"
 #include "imagewriter.h"
 #include "../qucs-lib/qucslib_common.h"
 #include "misc.h"
@@ -156,6 +156,8 @@ QucsApp::QucsApp()
   MouseReleaseAction = 0;
   MouseDoubleClickAction = 0;
 
+  Module::registerModules ();
+
   initView();
   initActions();
   initMenuBar();
@@ -167,7 +169,6 @@ QucsApp::QucsApp()
   slotViewOctaveDock(false);
   slotUpdateRecentFiles();
   initCursorMenu();
-  Module::registerModules ();
 
   // instance of small text search dialog
   SearchDia = new SearchDialog(this);
@@ -182,16 +183,16 @@ QucsApp::QucsApp()
 
   lastExportFilename = QDir::homePath() + QDir::separator() + "export.png";
 
-  // load documents given as command line arguments
-  for(int z=1; z<qApp->argc(); z++) {
-    QString arg = qApp->argv()[z];
-    if(*(arg) != '-') {
-      QFileInfo Info(arg);
-      QucsSettings.QucsWorkDir.setPath(Info.absoluteDir().absolutePath());
-      arg = QucsSettings.QucsWorkDir.filePath(Info.fileName());
-      gotoPage(arg);
-    }
-  }
+//  // load documents given as command line arguments
+//  for(int z=1; z<qApp->argc(); z++) {
+//    QString arg = qApp->argv()[z];
+//    if(*(arg) != '-') {
+//      QFileInfo Info(arg);
+//      QucsSettings.QucsWorkDir.setPath(Info.absoluteDir().absolutePath());
+//      arg = QucsSettings.QucsWorkDir.filePath(Info.fileName());
+//      gotoPage(arg);
+//    }
+//  }
 
   if (QucsSettings.DefaultSimulator == spicecompat::simNotSpecified) {
       QMessageBox::information(this,tr("Qucs"),tr("Default simulator is not specified yet.\n"
@@ -605,9 +606,9 @@ QucsDoc * QucsApp::findDoc (QString File, int * Pos)
 {
   QucsDoc * d;
   int No = 0;
-  File = QDir::convertSeparators (File);
+  File = QDir::toNativeSeparators( File);
   while ((d = getDoc (No++)) != 0)
-    if (QDir::convertSeparators (d->DocName) == File) {
+    if (QDir::toNativeSeparators (d->DocName) == File) {
       if (Pos) *Pos = No - 1;
       return d;
     }
@@ -684,9 +685,8 @@ void QucsApp::slotSetCompView (int index)
 
       // Just need path to bitmap, do not create an object
       QString Name, vaBitmap;
-      Component * c = (Component *)
-              vacomponent::info (Name, vaBitmap, false, i.value());
-      if (c) delete c;
+//      Component * c = (Component *)vacomponent::info (Name, vaBitmap, false, i.value());
+//      if (c) delete c;
 
       // check if icon exists, fall back to default
       QString iconPath = QucsSettings.QucsWorkDir.filePath(vaBitmap+".png");
@@ -801,7 +801,7 @@ void QucsApp::slotSearchComponent(const QString &searchText)
       i.next();
       // Just need path to bitmap, do not create an object
       QString Name, vaBitmap;
-      vacomponent::info (Name, vaBitmap, false, i.value());
+//      vacomponent::info (Name, vaBitmap, false, i.value());
 
       if((Name.indexOf(searchText, 0, Qt::CaseInsensitive)) != -1) {
         //match
@@ -1287,7 +1287,7 @@ void QucsApp::slotMenuProjClose()
 
   slotResetWarnings();
   setWindowTitle("Qucs " PACKAGE_VERSION + tr(" - Project: "));
-  QucsSettings.QucsWorkDir.setPath(QDir::homePath()+QDir::convertSeparators ("/.qucs"));
+  QucsSettings.QucsWorkDir.setPath(QDir::homePath()+QDir::toNativeSeparators ("/.qucs"));
   octave->adjustDirectory();
 
   Content->setProjPath("");
@@ -1924,10 +1924,10 @@ void QucsApp::printCurrentDocument(bool fitToPage)
   statusBar()->showMessage(tr("Printing..."));
   slotHideEdit(); // disable text edit of component property
 
-  PrinterWriter *writer = new PrinterWriter();
-  writer->setFitToPage(fitToPage);
-  writer->print(DocumentTab->currentWidget());
-  delete writer;
+//  PrinterWriter *writer = new PrinterWriter();
+//  writer->setFitToPage(fitToPage);
+//  writer->print(DocumentTab->currentWidget());
+//  delete writer;
 
   statusBar()->showMessage(tr("Ready."));
   return;
@@ -2709,7 +2709,7 @@ void QucsApp::slotEditElement()
 // looses the focus.
 void QucsApp::slotHideEdit()
 {
-  editText->setParent(this, 0);
+  editText->setParent(this);
   editText->setHidden(true);
 }
 
@@ -2866,13 +2866,13 @@ void QucsApp::slotSaveDiagramToGraphicsFile()
 
 void QucsApp::slotSaveSchematicToGraphicsFile(bool diagram)
 {
-  ImageWriter *writer = new ImageWriter(lastExportFilename);
-  writer->setDiagram(diagram);
-  if (!writer->print(DocumentTab->currentWidget())) {
-    lastExportFilename = writer->getLastSavedFile();
-    statusBar()->showMessage(QObject::tr("Successfully exported"), 2000);
-  }
-  delete writer;
+//  ImageWriter *writer = new ImageWriter(lastExportFilename);
+//  writer->setDiagram(diagram);
+//  if (!writer->print(DocumentTab->currentWidget())) {
+//    lastExportFilename = writer->getLastSavedFile();
+//    statusBar()->showMessage(QObject::tr("Successfully exported"), 2000);
+//  }
+//  delete writer;
 }
 
 
@@ -2886,8 +2886,8 @@ void QucsApp::slotSimSettings()
 
 void QucsApp::slotSimulateWithSpice()
 {
-    if (!isTextDocument(DocumentTab->currentPage())) {
-        Schematic *sch = (Schematic*)DocumentTab->currentPage();
+    if (!isTextDocument(DocumentTab->currentWidget())) {
+        Schematic *sch = (Schematic*)DocumentTab->currentWidget();
 
         ExternSimDialog *SimDlg = new ExternSimDialog(sch);
         connect(SimDlg,SIGNAL(simulated()),this,SLOT(slotAfterSpiceSimulation()));
@@ -2905,7 +2905,7 @@ void QucsApp::slotSimulateWithSpice()
 
 void QucsApp::slotAfterSpiceSimulation()
 {
-    Schematic *sch = (Schematic*)DocumentTab->currentPage();
+    Schematic *sch = (Schematic*)DocumentTab->currentWidget();
     sch->reloadGraphs();
     sch->viewport()->update();
     if(sch->SimRunScript) {
@@ -2917,8 +2917,8 @@ void QucsApp::slotAfterSpiceSimulation()
 
 void QucsApp::slotBuildVAModule()
 {
-    if (!isTextDocument(DocumentTab->currentPage())) {
-        Schematic *Sch = (Schematic*)DocumentTab->currentPage();
+    if (!isTextDocument(DocumentTab->currentWidget())) {
+        Schematic *Sch = (Schematic*)DocumentTab->currentWidget();
 
         QFileInfo inf(Sch->DocName);
         QString filename = QFileDialog::getSaveFileName(this,tr("Save Verilog-A module"),
@@ -2947,8 +2947,8 @@ void QucsApp::slotBuildVAModule()
 
 void QucsApp::slotBuildXSPICEIfs(int mode)
 {
-    if (!isTextDocument(DocumentTab->currentPage())) {
-        Schematic *Sch = (Schematic*)DocumentTab->currentPage();
+    if (!isTextDocument(DocumentTab->currentWidget())) {
+        Schematic *Sch = (Schematic*)DocumentTab->currentWidget();
 
         QFileInfo inf(Sch->DocName);
 

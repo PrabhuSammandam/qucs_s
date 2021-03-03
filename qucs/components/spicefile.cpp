@@ -18,7 +18,7 @@
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QProcess>
 #include <QString>
 #include <QStringList>
@@ -106,7 +106,7 @@ void SpiceFile::createSymbol()
   if(withSim) {
     i = fHeight - 2;
     tmp = QObject::tr("sim");
-    w = smallmetrics.width(tmp);
+    w = smallmetrics.horizontalAdvance(tmp);
     Texts.append(new Text(w/-2, 0, tmp, Qt::red));
   }
   tmp = QObject::tr("spice");
@@ -119,7 +119,7 @@ void SpiceFile::createSymbol()
     Lines.append(new Line(-30,  y,-HALFWIDTH,  y,QPen(Qt::darkBlue,2)));
     Ports.append(new Port(-30,  y));
     tmp = PortNames.section(',', i, i).mid(4);
-    w = smallmetrics.width(tmp);
+    w = smallmetrics.horizontalAdvance(tmp);
     Texts.append(new Text(-20-w, y-fHeight-2, tmp)); // text right-aligned
     i++;
 
@@ -218,7 +218,7 @@ QString SpiceFile::getSubcircuitFile()
                 else
                 {
                     /// \todo improve GUI/CLI error/warning
-                    qCritical() << "Spice file not found:" << localFileInfo.absFilePath();
+                    qCritical() << "Spice file not found:" << localFileInfo.absoluteFilePath();
                 }
             }
         }

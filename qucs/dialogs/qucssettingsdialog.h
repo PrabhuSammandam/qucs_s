@@ -21,6 +21,7 @@
 
 #include "qucs.h"
 
+#include<QtWidgets>
 #include <QDialog>
 #include <QFont>
 #include <QRegExp>
@@ -93,8 +94,8 @@ public:
     QVBoxLayout *all;
     QIntValidator *val50;
     QIntValidator *val200;
-    QRegExp Expr;
-    QRegExpValidator *Validator;
+    QRegularExpression Expr;
+    QRegularExpressionValidator *Validator;
 
 private:
     QStringList currentPaths;

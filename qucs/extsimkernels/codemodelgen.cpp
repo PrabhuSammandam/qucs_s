@@ -26,7 +26,7 @@
 #include <QPlainTextEdit>
 #include <QProcess>
 #include "misc.h"
-
+#include <QRegExp>
 #include "paintings/id_text.h"
 
 /*!
@@ -487,7 +487,7 @@ bool CodeModelGen::GinacDiffTernaryOp(QString &eq, QString &var, QString &res)
     bool r = false;
     QStringList::iterator subeq = tokens.begin();
     for(;subeq!=tokens.end();subeq++) {
-        if (!(*subeq).contains(QRegExp("[?:<>=]"))) {
+        if (!(*subeq).contains(QRegularExpression("[?:<>=]"))) {
             QString subres;
             r = GinacDiff(*subeq,var,subres);
             if (!r) return false;
@@ -512,7 +512,7 @@ bool CodeModelGen::GinacConvToCTernaryOp(QString &eq, QString &res)
     bool r = false;
     QStringList::iterator subeq = tokens.begin();
     for(;subeq!=tokens.end();subeq++) {
-        if (!(*subeq).contains(QRegExp("[?:<>=]"))) {
+        if (!(*subeq).contains(QRegularExpression("[?:<>=]"))) {
             QString subres;
             r = GinacConvToC(*subeq,subres);
             if (!r) return false;
@@ -592,7 +592,7 @@ void CodeModelGen::scanEquations(Schematic *sch,QStringList &pars,
                 QString nam = pp->Name;
                 if(pars.contains(nam)) {
                     found =  true;
-                    pars.remove(nam);
+                    pars.removeOne(nam);
                     if(!init_pars.contains(nam)) {
                         init_pars.append(nam);
                         QStringList tokens;
@@ -620,8 +620,8 @@ void CodeModelGen::scanEquations(Schematic *sch,QStringList &pars,
     } else {
         int Nv = init_pars.count(); // Reverse init parameters list before exit
         for(int i = 0; i < (Nv/2); i++) {
-            init_pars.swap(i,Nv-(1+i));
-            InitEqns.swap(i,Nv-(1+i));
+            init_pars.swapItemsAt(i,Nv-(1+i));
+            InitEqns.swapItemsAt(i,Nv-(1+i));
         }
         return;
     }

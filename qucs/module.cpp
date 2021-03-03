@@ -84,10 +84,9 @@ Component * Module::getComponent (QString Model) {
     QString Name;
     char * File;
     QString vaBitmap;
-    if (vaComponents.contains(Model))
-      return (Component *)
-              vacomponent::info (Name, vaBitmap, true, vaComponents[Model]);
-    else
+//    if (vaComponents.contains(Model))
+//      return (Component *)vacomponent::info (Name, vaBitmap, true, vaComponents[Model]);
+//    else
       return (Component *) m->info (Name, File, true);
   }
   return 0;
@@ -113,7 +112,7 @@ void Module::registerDynamicComponents()
 
      // the typedef needs to be different
      //passes the pointer, but it has no idea how to call the JSON
-     m->infoVA = &vacomponent::info;
+//     m->infoVA = &vacomponent::info; CRITICAL_PRABHU
 
      // TODO maybe allow user load into custom category?
      m->category = QObject::tr("verilog-a user devices");
@@ -124,10 +123,11 @@ void Module::registerDynamicComponents()
      //char * File;
      QString Name, Model, vaBitmap;
 //     char * File;
-     Component * c = (Component *)
-             vacomponent::info (Name, vaBitmap, true, vaComponents[i.key()]);
-     Model = c->Model;
-     delete c;
+
+//     CRITICAL_PRABHU
+//     Component * c = (Component *)vacomponent::info (Name, vaBitmap, true, vaComponents[i.key()]);
+//     Model = c->Model;
+//     delete c;
 
      // put into category and the component hash
      intoCategory (m);

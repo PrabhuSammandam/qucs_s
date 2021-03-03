@@ -22,13 +22,16 @@
 #include <QRegExp>
 #include <QGridLayout>
 #include <QLabel>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 class QLabel;
 class QLineEdit;
 class QPushButton;
 class QGridLayout;
-class QRegExpValidator;
+class QRegularExpressionValidator;
 class WireLabel;
+class QRegularExpression;
 
 
 class LabelDialog : public QDialog  {
@@ -47,8 +50,8 @@ private slots:
 private:
   QPushButton *ButtonOk, *ButtonCancel, *ButtonMore;
   QGridLayout *gbox;
-  QRegExpValidator *Validator1, *Validator2;
-  QRegExp      Expr1, Expr2;
+  QRegularExpressionValidator *Validator1, *Validator2;
+  QRegularExpression      Expr1, Expr2;
   QLabel      *Label2;
 
   WireLabel *pLabel;

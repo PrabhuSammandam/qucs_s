@@ -20,6 +20,7 @@
 
 #include "textdoc.h"
 #include <QSyntaxHighlighter>
+#include <QRegExp>
 
 enum language_type {
   LANG_NONE = 0,

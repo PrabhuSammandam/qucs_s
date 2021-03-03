@@ -19,6 +19,8 @@
 #include "xyce.h"
 #include "components/equation.h"
 #include "main.h"
+#include <QRegExp>
+#include <QRegularExpression>
 
 
 /*!
@@ -217,7 +219,7 @@ void Xyce::createNetlist(QTextStream &stream, int , QStringList &simulations,
     QString filename;
     if (hasParSweep) filename = QString("%1_%2_swp.txt").arg(basenam).arg(sim);
     else filename = QString("%1_%2.txt").arg(basenam).arg(sim);
-    filename.remove(QRegExp("\\s")); // XYCE don't support spaces and quotes
+    filename.remove(QRegularExpression("\\s")); // XYCE don't support spaces and quotes
     QString write_str;
     if (sim=="hb") {
         // write_str = QString(".PRINT  %1 file=%2 %3\n").arg(sim).arg(filename).arg(nods);
@@ -282,7 +284,7 @@ void Xyce::slotSimulate()
         QStringList sim_lst;
         sim_lst.clear();
         sim_lst.append(sim);
-        QString tmp_path = QDir::convertSeparators(workdir+"/spice4qucs."+sim+".cir");
+        QString tmp_path = QDir::toNativeSeparators(workdir+"/spice4qucs."+sim+".cir");
         netlistQueue.append(tmp_path);
         QFile spice_file(tmp_path);
         if (spice_file.open(QFile::WriteOnly)) {

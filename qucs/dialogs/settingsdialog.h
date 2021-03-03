@@ -18,6 +18,7 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
+#include <QtWidgets>
 #include <QDialog>
 #include <QVBoxLayout>
 
@@ -56,7 +57,7 @@ public:
   QCheckBox *Check_OpenDpl, *Check_GridOn, *Check_RunScript;
 
   QVBoxLayout *all;
-  QRegExpValidator *valExpr;
+  QRegularExpressionValidator *valExpr;
 };
 
 class AuxFilesDialog : public QDialog {

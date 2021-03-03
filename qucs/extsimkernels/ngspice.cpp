@@ -29,6 +29,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <QRegExp>
+#include <QRegularExpression>
+
 
 /*!
   \file ngspice.cpp
@@ -234,7 +237,7 @@ void Ngspice::createNetlist(QTextStream &stream, int ,
                    custom_vars = pc->Props.at(1)->Value;
                    custom_vars.replace(";"," ");
                    QString cust_out = pc->Props.at(2)->Value;
-                   outputs.append(cust_out.split(';',QString::SkipEmptyParts));
+                   outputs.append(cust_out.split(';',Qt::SkipEmptyParts));
                }
                if (sim_typ==".SW") {
                    QString SwpSim = pc->Props.at(0)->Value;
@@ -427,7 +430,7 @@ void Ngspice::slotSimulate()
     }
 
     QString netfile = "spice4qucs.cir";
-    QString tmp_path = QDir::convertSeparators(workdir+QDir::separator()+netfile);
+    QString tmp_path = QDir::toNativeSeparators(workdir+QDir::separator()+netfile);
     SaveNetlist(tmp_path);
 
     removeAllSimulatorOutputs();
@@ -446,7 +449,7 @@ void Ngspice::slotSimulate()
     SimProcess->setWorkingDirectory(workdir);
     qDebug()<<workdir;
     QString cmd = QString("\"%1\" %2 %3").arg(simulator_cmd,simulator_parameters,netfile);
-    SimProcess->start(cmd);
+    SimProcess->start(simulator_cmd, QStringList() << netfile);
     emit started();
 }
 
@@ -530,8 +533,8 @@ void Ngspice::slotProcessOutput()
         int percent = round(s.mid(1,5).toFloat());
         emit progress(percent);
     } else {
-        s.remove(QRegExp("%\\d\\d*\\.\\d\\d")); // Remove percentage from logs
-        s.remove(QRegExp("\010+")); // Large amount of datar from percentage reports
+        s.remove(QRegularExpression("%\\d\\d*\\.\\d\\d")); // Remove percentage from logs
+        s.remove(QRegularExpression("\010+")); // Large amount of datar from percentage reports
                                     // can freeze QTextEdit for over 100k simulation points
         output += s;
     }
@@ -558,7 +561,7 @@ void Ngspice::SaveNetlist(QString filename)
 
 void Ngspice::setSimulatorCmd(QString cmd)
 {
-    if (cmd.contains(QRegExp("spiceopus(....|)$"))) {
+    if (cmd.contains(QRegularExpression("spiceopus(....|)$"))) {
         // spiceopus needs English locale to produce correct decimal point (dot symbol)
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.remove("LANG");

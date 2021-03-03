@@ -22,6 +22,8 @@
 #ifndef ID_DIALOG_H
 #define ID_DIALOG_H
 
+#include <QtWidgets>
+
 #include <QDialog>
 #include <QRegExp>
 
@@ -51,8 +53,8 @@ private:
   QCheckBox *showCheck;
   QLineEdit *ParamNameEdit, *ValueEdit, *DescriptionEdit, *TypeEdit;
 
-  QRegExp Expr;
-  QRegExpValidator *SubVal, *NameVal, *ValueVal, *DescrVal, *TypeVal;
+  QRegularExpression Expr;
+  QRegularExpressionValidator *SubVal, *NameVal, *ValueVal, *DescrVal, *TypeVal;
 
 private slots:
   void slotOk();

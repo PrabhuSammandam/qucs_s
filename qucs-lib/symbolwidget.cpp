@@ -22,7 +22,7 @@
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <QTextIStream>
+//#include <QTextIStream>
 #include <QMimeData>
 #include <QDrag>
 #include <QTextStream>
@@ -52,10 +52,10 @@ SymbolWidget::SymbolWidget(QWidget *parent) : QWidget(parent)
   y2 = 0;
   PaintText = tr("Symbol:");
   QFontMetrics  metrics(QucsSettings.font, 0); // use the the screen-compatible metric
-  TextWidth = metrics.width(PaintText) + 4;    // get size of text
+  TextWidth = metrics.horizontalAdvance(PaintText) + 4;    // get size of text
 
   DragNDropText = tr("! Drag n'Drop me !");
-  DragNDropWidth = metrics.width(DragNDropText);    // get size of text
+  DragNDropWidth = metrics.horizontalAdvance(DragNDropText);    // get size of text
   TextHeight = metrics.lineSpacing();
 
   ///setPaletteBackgroundColor(Qt::white);

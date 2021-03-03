@@ -18,6 +18,7 @@
 #ifndef FILLDIALOG_H
 #define FILLDIALOG_H
 
+#include <QtWidgets>
 #include <QDialog>
 
 class QVBoxLayout;

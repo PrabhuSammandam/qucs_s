@@ -18,6 +18,8 @@
 #ifndef SIMMESSAGE_H
 #define SIMMESSAGE_H
 
+#include <QtWidgets>
+
 #include <QDialog>
 #include <QProcess>
 #include <QStringList>

@@ -27,7 +27,7 @@
 #include "components/spicefile.h"
 #include "components/optimizedialog.h"
 #include "components/componentdialog.h"
-#include "components/vacomponent.h"
+//#include "components/vacomponent.h"
 #include "spicecomponents/sp_customsim.h"
 #include "diagrams/diagramdialog.h"
 #include "diagrams/markerdialog.h"
@@ -38,7 +38,7 @@
 #include "extsimkernels/customsimdialog.h"
 
 #include <QTextStream>
-#include <Q3PtrList>
+#include "q3ptrlist.h"
 #include <QMouseEvent>
 #include <QClipboard>
 #include <QApplication>
@@ -74,8 +74,11 @@ MouseActions::MouseActions(QucsApp* App_)
   // ...............................................................
   // initialize menu appearing by right mouse button click on component
   ComponentMenu = new QMenu(QucsMain);
-  focusMEvent   = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0),
-				  Qt::NoButton, Qt::NoButton);
+  focusMEvent   = new QMouseEvent(QEvent::MouseButtonPress,
+                                  QPointF(0,0),
+                                  Qt::NoButton,
+                                  Qt::NoButton,
+                                  Qt::NoModifier);
 }
 
 
@@ -500,7 +503,7 @@ void MouseActions::MMoveMoving2(Schematic *Doc, QMouseEvent *Event)
 //          ((Wire*)pe)->Label->paintScheme(&painter);
 
   drawn = true;
-  if((Event->state() & Qt::ControlModifier) == 0)
+  if((Event->modifiers() & Qt::ControlModifier) == 0)
     Doc->setOnGrid(MAx2, MAy2);  // use grid only if CTRL key not pressed
   MAx1 = MAx2 - MAx1;
   MAy1 = MAy2 - MAy1;
@@ -778,7 +781,7 @@ void MouseActions::rightPressMenu(Schematic *Doc, QMouseEvent *Event, float fX, 
   while(true) {
     if(focusElement) {
       focusElement->isSelected = true;
-      ComponentMenu->insertItem(
+      ComponentMenu->addAction(
          QObject::tr("Edit Properties"), QucsMain, SLOT(slotEditElement()));
 
       if((focusElement->Type & isComponent) == 0) break;
@@ -788,36 +791,52 @@ void MouseActions::rightPressMenu(Schematic *Doc, QMouseEvent *Event, float fX, 
       //ComponentMenu->addAction(QucsMain->symEdit);
       //to QucsMain->symEdit->addTo(ComponentMenu);
       // see http://qt-project.org/doc/qt-4.8/qaction-qt3.html#addTo
-      QucsMain->symEdit->addTo(ComponentMenu);
-      QucsMain->fileSettings->addTo(ComponentMenu);
+
+
+//      QucsMain->symEdit->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->symEdit);
+
+//      QucsMain->fileSettings->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->fileSettings);
     }
-    if(!QucsMain->moveText->isOn())
-      QucsMain->moveText->addTo(ComponentMenu);
+    if(!QucsMain->moveText->isChecked())
+    {
+//      QucsMain->moveText->addTo(ComponentMenu);
+        ComponentMenu->addAction(QucsMain->moveText);
+    }
     break;
   }
   while(true) {
     if(focusElement)
       if(focusElement->Type == isGraph) break;
-    if(!QucsMain->onGrid->isOn())
-      QucsMain->onGrid->addTo(ComponentMenu);
-    QucsMain->editCopy->addTo(ComponentMenu);
-    if(!QucsMain->editPaste->isOn())
-      QucsMain->editPaste->addTo(ComponentMenu);
+    if(!QucsMain->onGrid->isChecked())
+    {
+//      QucsMain->onGrid->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->onGrid);
+    }
+//    QucsMain->editCopy->addTo(ComponentMenu);
+    ComponentMenu->addAction(QucsMain->editCopy);
+
+    if(!QucsMain->editPaste->isChecked())
+    {
+//      QucsMain->editPaste->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->editPaste);
+    }
     break;
   }
 
   while (true) {
     if (focusElement) {
       if (focusElement->Type == isDiagram) {
-        ComponentMenu->insertItem(QObject::tr("Export as image"), QucsMain,
+        ComponentMenu->addAction(QObject::tr("Export as image"), QucsMain,
             SLOT(slotSaveDiagramToGraphicsFile()));
       }
       if (focusElement->Type & isComponent) {
           Component *pc = (Component *)focusElement;
           if (pc->Model == "EDD") {
-              ComponentMenu->insertItem(QObject::tr("Create XSPICE IFS"), QucsMain,
+              ComponentMenu->addAction(QObject::tr("Create XSPICE IFS"), QucsMain,
                                                             SLOT(slotEDDtoIFS()));
-              ComponentMenu->insertItem(QObject::tr("Create XSPICE MOD"), QucsMain,
+              ComponentMenu->addAction(QObject::tr("Create XSPICE MOD"), QucsMain,
                                                             SLOT(slotEDDtoMOD()));
           }
       }
@@ -825,51 +844,83 @@ void MouseActions::rightPressMenu(Schematic *Doc, QMouseEvent *Event, float fX, 
     break;
   }
 
-  if(!QucsMain->editDelete->isOn())
-    QucsMain->editDelete->addTo(ComponentMenu);
+  if(!QucsMain->editDelete->isChecked())
+  {
+//    QucsMain->editDelete->addTo(ComponentMenu);
+    ComponentMenu->addAction(QucsMain->editDelete);
+  }
+
   if(focusElement) if(focusElement->Type == isMarker) {
-    ComponentMenu->insertSeparator();
+    ComponentMenu->addSeparator();
     QString s = QObject::tr("power matching");
+
     if( ((Marker*)focusElement)->pGraph->Var == "Sopt" )
       s = QObject::tr("noise matching");
-    ComponentMenu->insertItem(s, QucsMain, SLOT(slotPowerMatching()));
+
+    ComponentMenu->addAction(s, QucsMain, SLOT(slotPowerMatching()));
+
     if( ((Marker*)focusElement)->pGraph->Var.left(2) == "S[" )
-      ComponentMenu->insertItem(QObject::tr("2-port matching"), QucsMain,
+      ComponentMenu->addAction(QObject::tr("2-port matching"), QucsMain,
                                 SLOT(slot2PortMatching()));
   }
   do {
     if(focusElement) {
       if(focusElement->Type == isDiagram) break;
       if(focusElement->Type == isGraph) {
-        QucsMain->graph2csv->addTo(ComponentMenu);
+//        QucsMain->graph2csv->addTo(ComponentMenu);
+        ComponentMenu->addAction(QucsMain->graph2csv);
         break;
       }
     }
-    ComponentMenu->insertSeparator();
+    ComponentMenu->addSeparator();
+
     if(focusElement) if(focusElement->Type & isComponent)
-      if(!QucsMain->editActivate->isOn())
-        QucsMain->editActivate->addTo(ComponentMenu);
-    if(!QucsMain->editRotate->isOn())
-      QucsMain->editRotate->addTo(ComponentMenu);
-    if(!QucsMain->editMirror->isOn())
-      QucsMain->editMirror->addTo(ComponentMenu);
-    if(!QucsMain->editMirrorY->isOn())
-      QucsMain->editMirrorY->addTo(ComponentMenu);
+      if(!QucsMain->editActivate->isChecked())
+      {
+//        QucsMain->editActivate->addTo(ComponentMenu);
+        ComponentMenu->addAction(QucsMain->editActivate);
+      }
+    if(!QucsMain->editRotate->isChecked())
+    {
+//      QucsMain->editRotate->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->editRotate);
+    }
+    if(!QucsMain->editMirror->isChecked())
+    {
+//      QucsMain->editMirror->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->editMirror);
+    }
+    if(!QucsMain->editMirrorY->isChecked())
+    {
+//      QucsMain->editMirrorY->addTo(ComponentMenu);
+      ComponentMenu->addAction(QucsMain->editMirrorY);
+    }
 
     // right-click menu to go into hierarchy
     if(focusElement) {
       if(focusElement->Type & isComponent)
 	if(((Component*)focusElement)->Model == "Sub")
-	  if(!QucsMain->intoH->isOn())
-	    QucsMain->intoH->addTo(ComponentMenu);
+      if(!QucsMain->intoH->isChecked())
+      {
+//	    QucsMain->intoH->addTo(ComponentMenu);
+        ComponentMenu->addAction(QucsMain->intoH);
+      }
     }
     // right-click menu to pop out of hierarchy
     if(!focusElement)
-      if(!QucsMain->popH->isOn())
-	QucsMain->popH->addTo(ComponentMenu);
+      if(!QucsMain->popH->isChecked())
+      {
+//        QucsMain->popH->addTo(ComponentMenu);
+        ComponentMenu->addAction(QucsMain->popH);
+      }
   } while(false);
 
-  *focusMEvent = *Event;  // remember event for "edit component" action
+  if(focusMEvent)
+  {
+      delete focusMEvent;
+      focusMEvent = nullptr;
+  }
+  focusMEvent = Event->clone();  // remember event for "edit component" action
   ComponentMenu->popup(Event->globalPos());
   Doc->viewport()->update();
   drawn = false;
@@ -948,7 +999,7 @@ void MouseActions::MPressLabel(Schematic *Doc, QMouseEvent*, float fX, float fY)
 void MouseActions::MPressSelect(Schematic *Doc, QMouseEvent *Event, float fX, float fY)
 {
   bool Ctrl;
-  if(Event->state() & Qt::ControlModifier) Ctrl = true;
+  if(Event->modifiers() & Qt::ControlModifier) Ctrl = true;
   else Ctrl = false;
 
   int No=0;
@@ -1268,17 +1319,17 @@ void MouseActions::MPressElement(Schematic *Doc, QMouseEvent *Event, float, floa
 	Doc->setChanged(true, true);
 	rot = Comp->rotated;
 
-    // handle static and dynamic components
-//    QucsApp::CompChoose;
-    if (Module::vaComponents.contains(entryName)){
-      QString filename = Module::vaComponents[entryName];
-//      qDebug() << "   ===+ recast";
-      Comp = dynamic_cast<vacomponent*>(Comp)->newOne(filename); //va component
-      qDebug() << "   => recast = Comp;" << Comp->Name << "filename: " << filename;
-    }
-    else {
+//    // handle static and dynamic components
+////    QucsApp::CompChoose;
+//    if (Module::vaComponents.contains(entryName)){
+//      QString filename = Module::vaComponents[entryName];
+////      qDebug() << "   ===+ recast";
+//      Comp = dynamic_cast<vacomponent*>(Comp)->newOne(filename); //va component
+//      qDebug() << "   => recast = Comp;" << Comp->Name << "filename: " << filename;
+//    }
+//    else {
 	  Comp = Comp->newOne(); // static component is used, so create a new one
-    }
+//    }
 	rot -= Comp->rotated;
 	rot &= 3;
 	while(rot--) Comp->rotate(); // keep last rotation for single component
@@ -1554,7 +1605,7 @@ void MouseActions::MPressZoomIn(Schematic *Doc, QMouseEvent*, float fX, float fY
 void MouseActions::MReleaseSelect(Schematic *Doc, QMouseEvent *Event)
 {
   bool ctrl;
-  if(Event->state() & Qt::ControlModifier) ctrl = true;
+  if(Event->modifiers() & Qt::ControlModifier) ctrl = true;
   else ctrl = false;
 
   if(!ctrl) Doc->deselectElements(focusElement);
@@ -1582,7 +1633,7 @@ void MouseActions::MReleaseSelect2(Schematic *Doc, QMouseEvent *Event)
   if(Event->button() != Qt::LeftButton) return;
 
   bool Ctrl;
-  if(Event->state() & Qt::ControlModifier) Ctrl = true;
+  if(Event->modifiers() & Qt::ControlModifier) Ctrl = true;
   else Ctrl = false;
 
   // selects all elements within the rectangle
@@ -1783,7 +1834,7 @@ void MouseActions::MReleasePaste(Schematic *Doc, QMouseEvent *Event)
 	  break;
 	case isDiagram:
 	  Doc->Diagrams->append((Diagram*)pe);
-	  ((Diagram*)pe)->loadGraphData(Info.dirPath() + QDir::separator() +
+      ((Diagram*)pe)->loadGraphData(Info.dir().path() + QDir::separator() +
 					Doc->DataSet);
 	  Doc->enlargeView(pe->cx, pe->cy-pe->y2, pe->cx+pe->x2, pe->cy);
 	  break;
