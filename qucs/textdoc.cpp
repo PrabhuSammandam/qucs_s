@@ -106,13 +106,15 @@ void TextDoc::setLanguage (const QString& FileName)
 {
   QFileInfo Info (FileName);
   QString ext = Info.suffix();
-  if (ext == "vhd" || ext == "vhdl")
-    setLanguage (LANG_VHDL);
-  else if (ext == "v")
-    setLanguage (LANG_VERILOG);
-  else if (ext == "va")
-    setLanguage (LANG_VERILOGA);
-  else if (ext == "m" || ext == "oct")
+//  if (ext == "vhd" || ext == "vhdl")
+//    setLanguage (LANG_VHDL);
+//  else
+//  if (ext == "v")
+//    setLanguage (LANG_VERILOG);
+//  else if (ext == "va")
+//    setLanguage (LANG_VERILOGA);
+//  else
+  if (ext == "m" || ext == "oct")
     setLanguage (LANG_OCTAVE);
   else
     setLanguage (LANG_NONE);
@@ -236,20 +238,22 @@ void TextDoc::becomeCurrent (bool)
   App->symEdit->setWhatsThis (
 	tr("Edit Text Symbol\n\nEdits the symbol for this text document"));
 
-  if (language == LANG_VHDL) {
-    App->insEntity->setText (tr("VHDL entity"));
-    App->insEntity->setStatusTip (tr("Inserts skeleton of VHDL entity"));
-    App->insEntity->setWhatsThis (
-	tr("VHDL entity\n\nInserts the skeleton of a VHDL entity"));
-  }
-  else if (language == LANG_VERILOG || language == LANG_VERILOGA) {
-    App->insEntity->setText (tr("Verilog module"));
-    App->insEntity->setStatusTip (tr("Inserts skeleton of Verilog module"));
-    App->insEntity->setWhatsThis (
-	tr("Verilog module\n\nInserts the skeleton of a Verilog module"));
-    App->buildModule->setEnabled(true);
-  }
-  else if (language == LANG_OCTAVE) {
+//  if (language == LANG_VHDL) {
+//    App->insEntity->setText (tr("VHDL entity"));
+//    App->insEntity->setStatusTip (tr("Inserts skeleton of VHDL entity"));
+//    App->insEntity->setWhatsThis (
+//	tr("VHDL entity\n\nInserts the skeleton of a VHDL entity"));
+//  }
+//  else
+//  if (language == LANG_VERILOG || language == LANG_VERILOGA) {
+//    App->insEntity->setText (tr("Verilog module"));
+//    App->insEntity->setStatusTip (tr("Inserts skeleton of Verilog module"));
+//    App->insEntity->setWhatsThis (
+//	tr("Verilog module\n\nInserts the skeleton of a Verilog module"));
+//    App->buildModule->setEnabled(true);
+//  }
+//  else
+  if (language == LANG_OCTAVE) {
     App->insEntity->setText (tr("Octave function"));
     App->insEntity->setStatusTip (tr("Inserts skeleton of Octave function"));
     App->insEntity->setWhatsThis (
@@ -493,13 +497,13 @@ void TextDoc::commentSelected ()
   QString co;
 
   switch (language) {
-  case LANG_VHDL:
-    co = "--";
-    break;
-  case LANG_VERILOG:
-  case LANG_VERILOGA:
-    co = "//";
-    break;
+//  case LANG_VHDL:
+//    co = "--";
+//    break;
+//  case LANG_VERILOG:
+//  case LANG_VERILOGA:
+//    co = "//";
+//    break;
   case LANG_OCTAVE:
     co = "%";
     break;
@@ -530,13 +534,15 @@ void TextDoc::commentSelected ()
  */
 void TextDoc::insertSkeleton ()
 {
-  if (language == LANG_VHDL)
-    appendPlainText("entity  is\n  port ( : in bit);\nend;\n"
-	    "architecture  of  is\n  signal : bit;\nbegin\n\nend;\n\n");
-  else if (language == LANG_VERILOG)
-    appendPlainText ("module  ( );\ninput ;\noutput ;\nbegin\n\nend\n"
-	    "endmodule\n\n");
-  else if (language == LANG_OCTAVE)
+//  if (language == LANG_VHDL)
+//    appendPlainText("entity  is\n  port ( : in bit);\nend;\n"
+//	    "architecture  of  is\n  signal : bit;\nbegin\n\nend;\n\n");
+//  else
+//  if (language == LANG_VERILOG)
+//    appendPlainText ("module  ( );\ninput ;\noutput ;\nbegin\n\nend\n"
+//	    "endmodule\n\n");
+//  else
+  if (language == LANG_OCTAVE)
     appendPlainText ("function  =  ( )\n"
 	    "endfunction\n\n");
 }
@@ -548,21 +554,21 @@ void TextDoc::insertSkeleton ()
 QString TextDoc::getModuleName (void)
 {
   switch (language) {
-  case LANG_VHDL:
-    {
-      VHDL_File_Info VInfo (toPlainText());
-      return VInfo.EntityName;
-    }
-  case LANG_VERILOG:
-    {
-      Verilog_File_Info VInfo (toPlainText());
-      return VInfo.ModuleName;
-    }
-  case LANG_VERILOGA:
-    {
-      VerilogA_File_Info VInfo (toPlainText());
-      return VInfo.ModuleName;
-    }
+//  case LANG_VHDL:
+//    {
+//      VHDL_File_Info VInfo (toPlainText());
+//      return VInfo.EntityName;
+//    }
+//  case LANG_VERILOG:
+//    {
+//      Verilog_File_Info VInfo (toPlainText());
+//      return VInfo.ModuleName;
+//    }
+//  case LANG_VERILOGA:
+//    {
+//      VerilogA_File_Info VInfo (toPlainText());
+//      return VInfo.ModuleName;
+//    }
   case LANG_OCTAVE:
     {
       QFileInfo Info (DocName);

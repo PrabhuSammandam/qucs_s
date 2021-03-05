@@ -1391,22 +1391,22 @@ bool Schematic::throughAllComps(QTextStream *stream, int& countInit,
       s = ((pc->Model == "VHDL") ? "VHD" : "VER");
       FileList.insert(f, SubFile(s, f));
 
-      if(pc->Model == "VHDL") {
-	VHDL_File *vf = (VHDL_File*)pc;
-	r = vf->createSubNetlist(stream);
-	ErrText->appendPlainText(vf->getErrorText());
-	if(!r) {
-	  return false;
-	}
-      }
-      if(pc->Model == "Verilog") {
-	Verilog_File *vf = (Verilog_File*)pc;
-	r = vf->createSubNetlist(stream);
-	ErrText->appendPlainText(vf->getErrorText());
-	if(!r) {
-	  return false;
-	}
-      }
+//      if(pc->Model == "VHDL") {
+//	VHDL_File *vf = (VHDL_File*)pc;
+//	r = vf->createSubNetlist(stream);
+//	ErrText->appendPlainText(vf->getErrorText());
+//	if(!r) {
+//	  return false;
+//	}
+//      }
+//      if(pc->Model == "Verilog") {
+//	Verilog_File *vf = (Verilog_File*)pc;
+//	r = vf->createSubNetlist(stream);
+//	ErrText->appendPlainText(vf->getErrorText());
+//	if(!r) {
+//	  return false;
+//	}
+//      }
       continue;
     }
   }

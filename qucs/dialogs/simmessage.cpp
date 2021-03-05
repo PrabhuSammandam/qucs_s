@@ -402,44 +402,65 @@ void SimMessage::startSimulator()
                  << DataSet << SimTime << pathName(SimPath)
                  << pathName(QucsSettings.BinDir) << libs;
     }
+#if 0
     // Module.
-    else {
-      QString text = Doc->toPlainText();
-      VHDL_File_Info VInfo (text);
-      QString entity = VInfo.EntityName.toLower();
-      QString lib = Doc->Library.toLower();
-      if (lib.isEmpty()) lib = "work";
-      QString dir = QDir::toNativeSeparators (QucsSettings.QucsHomeDir.path());
-      QDir vhdlDir(dir);
-      if(!vhdlDir.exists("vhdl"))
-	if(!vhdlDir.mkdir("vhdl")) {
-	  ErrText->appendPlainText(tr("ERROR: Cannot create VHDL directory \"%1\"!")
-			  .arg(vhdlDir.path()+"/vhdl"));
-	  return;
-	}
-      vhdlDir.setPath(vhdlDir.path()+"/vhdl");
-      if(!vhdlDir.exists(lib))
-	if(!vhdlDir.mkdir(lib)) {
-	  ErrText->appendPlainText(tr("ERROR: Cannot create VHDL directory \"%1\"!")
-			  .arg(vhdlDir.path()+"/"+lib));
-	  return;
-	}
-      vhdlDir.setPath(vhdlDir.path()+"/"+lib);
-      QFile destFile;
-      destFile.setFileName(vhdlDir.filePath(entity+".vhdl"));
-      if(!destFile.open(QIODevice::WriteOnly)) {
-	ErrText->appendPlainText(tr("ERROR: Cannot create \"%1\"!")
-			.arg(destFile.fileName()));
-	return;
-      }
-      destFile.write(text.toLatin1().data(), text.length());
-      destFile.close();
-      Program = pathName(QucsSettings.BinDir + QucsDigiLib);
-      Arguments << QucsSettings.QucsHomeDir.filePath("netlist.txt")
-                << pathName(SimPath)
-                << entity
-                << lib;
-    }
+    else
+    {
+        QString        text = Doc->toPlainText();
+        VHDL_File_Info VInfo( text );
+        QString        entity = VInfo.EntityName.toLower();
+        QString        lib    = Doc->Library.toLower();
+
+        if( lib.isEmpty() )
+        {
+           lib = "work";
+        }
+
+        QString dir = QDir::toNativeSeparators( QucsSettings.QucsHomeDir.path() );
+        QDir    vhdlDir( dir );
+
+        if( !vhdlDir.exists( "vhdl" ) )
+        {
+           if( !vhdlDir.mkdir( "vhdl" ) )
+           {
+              ErrText->appendPlainText( tr( "ERROR: Cannot create VHDL directory \"%1\"!" )
+                .arg( vhdlDir.path() + "/vhdl" ) );
+              return;
+           }
+        }
+
+        vhdlDir.setPath( vhdlDir.path() + "/vhdl" );
+
+        if( !vhdlDir.exists( lib ) )
+        {
+           if( !vhdlDir.mkdir( lib ) )
+           {
+              ErrText->appendPlainText( tr( "ERROR: Cannot create VHDL directory \"%1\"!" )
+                .arg( vhdlDir.path() + "/" + lib ) );
+              return;
+           }
+        }
+
+        vhdlDir.setPath( vhdlDir.path() + "/" + lib );
+        QFile destFile;
+        destFile.setFileName( vhdlDir.filePath( entity + ".vhdl" ) );
+
+        if( !destFile.open( QIODevice::WriteOnly ) )
+        {
+           ErrText->appendPlainText( tr( "ERROR: Cannot create \"%1\"!" )
+             .arg( destFile.fileName() ) );
+           return;
+        }
+
+        destFile.write( text.toLatin1().data(), text.length() );
+        destFile.close();
+        Program = pathName( QucsSettings.BinDir + QucsDigiLib );
+        Arguments << QucsSettings.QucsHomeDir.filePath( "netlist.txt" )
+                  << pathName( SimPath )
+                  << entity
+                  << lib;
+     }
+#endif
   }
   // Simulate schematic window.
   else {
@@ -530,15 +551,16 @@ void SimMessage::startSimulator()
           }
       } // vaComponents not empty
 
-      if((SimOpt = findOptimization((Schematic*)DocWidget))) {
-	    ((Optimize_Sim*)SimOpt)->createASCOnetlist();
+//      if((SimOpt = findOptimization((Schematic*)DocWidget))) {
+//	    ((Optimize_Sim*)SimOpt)->createASCOnetlist();
 
-        Program = QucsSettings.AscoBinDir.canonicalPath();
-        Program = QDir::toNativeSeparators(Program+"/"+"asco"+QString(executableSuffix));
-        Arguments << "-qucs" << QucsSettings.QucsHomeDir.filePath("asco_netlist.txt")
-                  << "-o" << "asco_out";
-      }
-      else {
+//        Program = QucsSettings.AscoBinDir.canonicalPath();
+//        Program = QDir::toNativeSeparators(Program+"/"+"asco"+QString(executableSuffix));
+//        Arguments << "-qucs" << QucsSettings.QucsHomeDir.filePath("asco_netlist.txt")
+//                  << "-o" << "asco_out";
+//      }
+//      else
+      {
         if (QucsSettings.QucsatorVar.isEmpty()) Program = QucsSettings.Qucsator;
         else Program = QucsSettings.QucsatorVar;
         Arguments << "-b" << "-g" << "-i"
@@ -817,8 +839,8 @@ void SimMessage::FinishSimulation(int Status)
 	}
 	ifile.close();
       }
-      if(((Optimize_Sim*)SimOpt)->loadASCOout())
-	((Schematic*)DocWidget)->setChanged(true,true);
+//      if(((Optimize_Sim*)SimOpt)->loadASCOout())
+//	((Schematic*)DocWidget)->setChanged(true,true);
     }
   }
 

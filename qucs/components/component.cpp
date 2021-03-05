@@ -1713,11 +1713,11 @@ Component* getComponentFromName(QString& Line, Schematic* p)
   if (cstr == "Lib") c = new LibComp ();
   else if (cstr == "Eqn") c = new Equation ();
   else if (cstr == "SPICE") c = new SpiceFile();
-  else if (cstr == "Rus") c = new Resistor (false);  // backward compatible
-  else if (cstr.left (6) == "SPfile" && cstr != "SPfile") {
-    // backward compatible
-    c = new SParamFile ();
-    c->Props.getLast()->Value = cstr.mid (6); }
+//  else if (cstr == "Rus") c = new Resistor (false);  // backward compatible
+//  else if (cstr.left (6) == "SPfile" && cstr != "SPfile") {
+//    // backward compatible
+//    c = new SParamFile ();
+//    c->Props.getLast()->Value = cstr.mid (6); }
   else
     c = Module::getComponent (cstr);
 

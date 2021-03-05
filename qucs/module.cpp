@@ -253,19 +253,19 @@ void Module::registerModules (void) {
   REGISTER_LUMPED_1 (SubCirPort);
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_LUMPED_1 (Transformer);
-      REGISTER_LUMPED_1 (symTrafo);
-      REGISTER_LUMPED_1 (dcBlock);
-      REGISTER_LUMPED_1 (dcFeed);
-      REGISTER_LUMPED_1 (BiasT);
-      REGISTER_LUMPED_1 (Attenuator);
-      REGISTER_LUMPED_1 (Amplifier);
-      REGISTER_LUMPED_1 (Isolator);
-      REGISTER_LUMPED_1 (Circulator);
-      REGISTER_LUMPED_1 (Gyrator);
-      REGISTER_LUMPED_1 (Phaseshifter);
-      REGISTER_LUMPED_1 (Coupler);
-      REGISTER_LUMPED_1 (Hybrid);
+//      REGISTER_LUMPED_1 (Transformer);
+//      REGISTER_LUMPED_1 (symTrafo);
+//      REGISTER_LUMPED_1 (dcBlock);
+//      REGISTER_LUMPED_1 (dcFeed);
+//      REGISTER_LUMPED_1 (BiasT);
+//      REGISTER_LUMPED_1 (Attenuator);
+//      REGISTER_LUMPED_1 (Amplifier);
+//      REGISTER_LUMPED_1 (Isolator);
+//      REGISTER_LUMPED_1 (Circulator);
+//      REGISTER_LUMPED_1 (Gyrator);
+//      REGISTER_LUMPED_1 (Phaseshifter);
+//      REGISTER_LUMPED_1 (Coupler);
+//      REGISTER_LUMPED_1 (Hybrid);
   }
 
 
@@ -273,10 +273,10 @@ void Module::registerModules (void) {
   REGISTER_LUMPED_1 (vProbe);
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_LUMPED_1 (Mutual);
-      REGISTER_LUMPED_1 (Mutual2);
-      REGISTER_LUMPED_1 (MutualX);
-      REGISTER_LUMPED_1 (Switch);
+//      REGISTER_LUMPED_1 (Mutual);
+//      REGISTER_LUMPED_1 (Mutual2);
+//      REGISTER_LUMPED_1 (MutualX);
+//      REGISTER_LUMPED_1 (Switch);
   } else {
       REGISTER_LUMPED_1 (S4Q_S);
       REGISTER_LUMPED_1 (S4Q_W);
@@ -285,8 +285,8 @@ void Module::registerModules (void) {
   REGISTER_LUMPED_1 (Relais);
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_LUMPED_1 (RFedd);
-      REGISTER_LUMPED_1 (RFedd2P);
+//      REGISTER_LUMPED_1 (RFedd);
+//      REGISTER_LUMPED_1 (RFedd2P);
   }
 
   // sources
@@ -295,9 +295,9 @@ void Module::registerModules (void) {
   REGISTER_SOURCE_1 (Volt_ac);
   REGISTER_SOURCE_1 (Ampere_ac);
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_SOURCE_1 (Source_ac);
-      REGISTER_SOURCE_1 (Volt_noise);
-      REGISTER_SOURCE_1 (Ampere_noise);
+//      REGISTER_SOURCE_1 (Source_ac);
+//      REGISTER_SOURCE_1 (Volt_noise);
+//      REGISTER_SOURCE_1 (Ampere_noise);
   }
   REGISTER_SOURCE_1 (VCCS);
   REGISTER_SOURCE_1 (CCCS);
@@ -309,19 +309,19 @@ void Module::registerModules (void) {
   REGISTER_SOURCE_1 (iRect);
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_SOURCE_1 (Noise_ii);
-      REGISTER_SOURCE_1 (Noise_vv);
-      REGISTER_SOURCE_1 (Noise_iv);
-      REGISTER_SOURCE_1 (AM_Modulator);
-      REGISTER_SOURCE_1 (PM_Modulator);
+//      REGISTER_SOURCE_1 (Noise_ii);
+//      REGISTER_SOURCE_1 (Noise_vv);
+//      REGISTER_SOURCE_1 (Noise_iv);
+//      REGISTER_SOURCE_1 (AM_Modulator);
+//      REGISTER_SOURCE_1 (PM_Modulator);
   }
 
   REGISTER_SOURCE_1 (iExp);
   REGISTER_SOURCE_1 (vExp);
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_SOURCE_1 (vFile);
-      REGISTER_SOURCE_1 (iFile);
+//      REGISTER_SOURCE_1 (vFile);
+//      REGISTER_SOURCE_1 (iFile);
   } else {
       REGISTER_SOURCE_1 (S4Q_V);
       REGISTER_SOURCE_1 (S4Q_I);
@@ -347,47 +347,46 @@ void Module::registerModules (void) {
 
   // transmission lines
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_TRANS_1 (TLine);
-      REGISTER_TRANS_1 (TLine_4Port);
-      REGISTER_TRANS_1 (CoupledTLine);
-      REGISTER_TRANS_1 (TwistedPair);
-      REGISTER_TRANS_1 (CoaxialLine);
-      REGISTER_TRANS_1 (RectLine);
-      REGISTER_TRANS_1 (RLCG);
-      REGISTER_TRANS_1 (Substrate);
-      REGISTER_TRANS_1 (MSline);
-      REGISTER_TRANS_1 (MScoupled);
-      REGISTER_TRANS_1 (MSlange);
-      REGISTER_TRANS_1 (MScorner);
-      REGISTER_TRANS_1 (MSmbend);
-      REGISTER_TRANS_1 (MSstep);
-      REGISTER_TRANS_1 (MStee);
-      REGISTER_TRANS_1 (MScross);
-      REGISTER_TRANS_1 (MSopen);
-      REGISTER_TRANS_1 (MSgap);
-      REGISTER_TRANS_1 (MSvia);
-      REGISTER_TRANS_1 (MSrstub);
-      REGISTER_TRANS_1 (Coplanar);
-      REGISTER_TRANS_1 (CPWopen);
-      REGISTER_TRANS_1 (CPWshort);
-      REGISTER_TRANS_1 (CPWgap);
-      REGISTER_TRANS_1 (CPWstep);
-      REGISTER_TRANS_1 (BondWire);
+//      REGISTER_TRANS_1 (TLine);
+//      REGISTER_TRANS_1 (TLine_4Port);
+//      REGISTER_TRANS_1 (CoupledTLine);
+//      REGISTER_TRANS_1 (TwistedPair);
+//      REGISTER_TRANS_1 (CoaxialLine);
+//      REGISTER_TRANS_1 (RectLine);
+//      REGISTER_TRANS_1 (RLCG);
+//      REGISTER_TRANS_1 (Substrate);
+//      REGISTER_TRANS_1 (MSline);
+//      REGISTER_TRANS_1 (MScoupled);
+//      REGISTER_TRANS_1 (MSlange);
+//      REGISTER_TRANS_1 (MScorner);
+//      REGISTER_TRANS_1 (MSmbend);
+//      REGISTER_TRANS_1 (MSstep);
+//      REGISTER_TRANS_1 (MStee);
+//      REGISTER_TRANS_1 (MScross);
+//      REGISTER_TRANS_1 (MSopen);
+//      REGISTER_TRANS_1 (MSgap);
+//      REGISTER_TRANS_1 (MSvia);
+//      REGISTER_TRANS_1 (MSrstub);
+//      REGISTER_TRANS_1 (Coplanar);
+//      REGISTER_TRANS_1 (CPWopen);
+//      REGISTER_TRANS_1 (CPWshort);
+//      REGISTER_TRANS_1 (CPWgap);
+//      REGISTER_TRANS_1 (CPWstep);
+//      REGISTER_TRANS_1 (BondWire);
   } else {
       REGISTER_TRANS_1 (LTL_SPICE);
       REGISTER_TRANS_1 (LTRA_SPICE);
       REGISTER_TRANS_1 (UDRCTL_SPICE);
   }
 
-
   // nonlinear components
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_NONLINEAR_1 (Diode);
-      REGISTER_NONLINEAR_2 (BJT, info, info_pnp);
-      REGISTER_NONLINEAR_2 (BJTsub, info, info_pnp);
-      REGISTER_NONLINEAR_2 (JFET, info, info_p);
-      REGISTER_NONLINEAR_3 (MOSFET, info, info_p, info_depl);
-      REGISTER_NONLINEAR_3 (MOSFET_sub, info, info_p, info_depl);
+//      REGISTER_NONLINEAR_1 (Diode);
+//      REGISTER_NONLINEAR_2 (BJT, info, info_pnp);
+//      REGISTER_NONLINEAR_2 (BJTsub, info, info_pnp);
+//      REGISTER_NONLINEAR_2 (JFET, info, info_p);
+//      REGISTER_NONLINEAR_3 (MOSFET, info, info_p, info_depl);
+//      REGISTER_NONLINEAR_3 (MOSFET_sub, info, info_p, info_depl);
   } else {
       REGISTER_NONLINEAR_1 (DIODE_SPICE);
       REGISTER_NONLINEAR_1 (NPN_SPICE);
@@ -406,88 +405,88 @@ void Module::registerModules (void) {
   REGISTER_NONLINEAR_1 (EqnDefined);
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_NONLINEAR_1 (Diac);
-      REGISTER_NONLINEAR_1 (Triac);
-      REGISTER_NONLINEAR_1 (Thyristor);
-      REGISTER_NONLINEAR_1 (TunnelDiode);
+//      REGISTER_NONLINEAR_1 (Diac);
+//      REGISTER_NONLINEAR_1 (Triac);
+//      REGISTER_NONLINEAR_1 (Thyristor);
+//      REGISTER_NONLINEAR_1 (TunnelDiode);
   }
 
 
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
       // verilog-a devices
-      REGISTER_VERILOGA_1 (mod_amp);
-      REGISTER_VERILOGA_1 (log_amp);
-      REGISTER_VERILOGA_1 (potentiometer);
-      REGISTER_VERILOGA_1 (MESFET);
-      REGISTER_VERILOGA_2 (EKV26MOS, info, info_pmos);
-      REGISTER_VERILOGA_1 (photodiode);
-      REGISTER_VERILOGA_1 (phototransistor);
-      REGISTER_VERILOGA_1 (nigbt);
-      REGISTER_VERILOGA_1 (vcresistor);
-      REGISTER_VERILOGA_1 (bsim3v34nMOS);
-      REGISTER_VERILOGA_1 (bsim3v34pMOS);
-      REGISTER_VERILOGA_1 (bsim4v30nMOS);
-      REGISTER_VERILOGA_1 (bsim4v30pMOS);
-      REGISTER_VERILOGA_2 (hicumL0V1p2, info, info_pnp);
-      REGISTER_VERILOGA_2 (hicumL0V1p2g, info, info_pnp);
-      REGISTER_VERILOGA_2 (hicumL0V1p3, info, info_pnp);
-      REGISTER_VERILOGA_1 (hicumL2V2p23);
-      REGISTER_VERILOGA_1 (hicumL2V2p24);
-      REGISTER_VERILOGA_1 (hicumL2V2p31n);
-      REGISTER_VERILOGA_1 (HBT_X);
+//      REGISTER_VERILOGA_1 (mod_amp);
+//      REGISTER_VERILOGA_1 (log_amp);
+//      REGISTER_VERILOGA_1 (potentiometer);
+//      REGISTER_VERILOGA_1 (MESFET);
+//      REGISTER_VERILOGA_2 (EKV26MOS, info, info_pmos);
+//      REGISTER_VERILOGA_1 (photodiode);
+//      REGISTER_VERILOGA_1 (phototransistor);
+//      REGISTER_VERILOGA_1 (nigbt);
+//      REGISTER_VERILOGA_1 (vcresistor);
+//      REGISTER_VERILOGA_1 (bsim3v34nMOS);
+//      REGISTER_VERILOGA_1 (bsim3v34pMOS);
+//      REGISTER_VERILOGA_1 (bsim4v30nMOS);
+//      REGISTER_VERILOGA_1 (bsim4v30pMOS);
+//      REGISTER_VERILOGA_2 (hicumL0V1p2, info, info_pnp);
+//      REGISTER_VERILOGA_2 (hicumL0V1p2g, info, info_pnp);
+//      REGISTER_VERILOGA_2 (hicumL0V1p3, info, info_pnp);
+//      REGISTER_VERILOGA_1 (hicumL2V2p23);
+//      REGISTER_VERILOGA_1 (hicumL2V2p24);
+//      REGISTER_VERILOGA_1 (hicumL2V2p31n);
+//      REGISTER_VERILOGA_1 (HBT_X);
 
       // digital components
-      REGISTER_DIGITAL_1 (Digi_Source);
-      REGISTER_DIGITAL_1 (Logical_Inv);
-      REGISTER_DIGITAL_1 (Logical_OR);
-      REGISTER_DIGITAL_1 (Logical_NOR);
-      REGISTER_DIGITAL_1 (Logical_AND);
-      REGISTER_DIGITAL_1 (Logical_NAND);
-      REGISTER_DIGITAL_1 (Logical_XOR);
-      REGISTER_DIGITAL_1 (Logical_XNOR);
-      REGISTER_DIGITAL_1 (Logical_Buf);
-      REGISTER_DIGITAL_1 (andor4x2);
-      REGISTER_DIGITAL_1 (andor4x3);
-      REGISTER_DIGITAL_1 (andor4x4);
-      REGISTER_DIGITAL_1 (mux2to1);
-      REGISTER_DIGITAL_1 (mux4to1);
-      REGISTER_DIGITAL_1 (mux8to1);
-      REGISTER_DIGITAL_1 (dmux2to4);
-      REGISTER_DIGITAL_1 (dmux3to8);
-      REGISTER_DIGITAL_1 (dmux4to16);
-      REGISTER_DIGITAL_1 (ha1b);
-      REGISTER_DIGITAL_1 (fa1b);
-      REGISTER_DIGITAL_1 (fa2b);
-      REGISTER_DIGITAL_1 (RS_FlipFlop);
-      REGISTER_DIGITAL_1 (D_FlipFlop);
-      REGISTER_DIGITAL_1 (dff_SR);
-      REGISTER_DIGITAL_1 (JK_FlipFlop);
-      REGISTER_DIGITAL_1 (jkff_SR);
-      REGISTER_DIGITAL_1 (tff_SR);
-      REGISTER_DIGITAL_1 (gatedDlatch);
-      REGISTER_DIGITAL_1 (logic_0);
-      REGISTER_DIGITAL_1 (logic_1);
-      REGISTER_DIGITAL_1 (pad2bit);
-      REGISTER_DIGITAL_1 (pad3bit);
-      REGISTER_DIGITAL_1 (pad4bit);
-      REGISTER_DIGITAL_1 (DLS_nto1);
-      REGISTER_DIGITAL_1 (DLS_1ton);
-      REGISTER_DIGITAL_1 (binarytogrey4bit);
-      REGISTER_DIGITAL_1 (greytobinary4bit);
-      REGISTER_DIGITAL_1 (comp_1bit);
-      REGISTER_DIGITAL_1 (comp_2bit);
-      REGISTER_DIGITAL_1 (comp_4bit);
-      REGISTER_DIGITAL_1 (hpribin4bit);
-      REGISTER_DIGITAL_1 (VHDL_File);
-      REGISTER_DIGITAL_1 (Verilog_File);
-      REGISTER_DIGITAL_1 (Digi_Sim);
+//      REGISTER_DIGITAL_1 (Digi_Source);
+//      REGISTER_DIGITAL_1 (Logical_Inv);
+//      REGISTER_DIGITAL_1 (Logical_OR);
+//      REGISTER_DIGITAL_1 (Logical_NOR);
+//      REGISTER_DIGITAL_1 (Logical_AND);
+//      REGISTER_DIGITAL_1 (Logical_NAND);
+//      REGISTER_DIGITAL_1 (Logical_XOR);
+//      REGISTER_DIGITAL_1 (Logical_XNOR);
+//      REGISTER_DIGITAL_1 (Logical_Buf);
+//      REGISTER_DIGITAL_1 (andor4x2);
+//      REGISTER_DIGITAL_1 (andor4x3);
+//      REGISTER_DIGITAL_1 (andor4x4);
+//      REGISTER_DIGITAL_1 (mux2to1);
+//      REGISTER_DIGITAL_1 (mux4to1);
+//      REGISTER_DIGITAL_1 (mux8to1);
+//      REGISTER_DIGITAL_1 (dmux2to4);
+//      REGISTER_DIGITAL_1 (dmux3to8);
+//      REGISTER_DIGITAL_1 (dmux4to16);
+//      REGISTER_DIGITAL_1 (ha1b);
+//      REGISTER_DIGITAL_1 (fa1b);
+//      REGISTER_DIGITAL_1 (fa2b);
+//      REGISTER_DIGITAL_1 (RS_FlipFlop);
+//      REGISTER_DIGITAL_1 (D_FlipFlop);
+//      REGISTER_DIGITAL_1 (dff_SR);
+//      REGISTER_DIGITAL_1 (JK_FlipFlop);
+//      REGISTER_DIGITAL_1 (jkff_SR);
+//      REGISTER_DIGITAL_1 (tff_SR);
+//      REGISTER_DIGITAL_1 (gatedDlatch);
+//      REGISTER_DIGITAL_1 (logic_0);
+//      REGISTER_DIGITAL_1 (logic_1);
+//      REGISTER_DIGITAL_1 (pad2bit);
+//      REGISTER_DIGITAL_1 (pad3bit);
+//      REGISTER_DIGITAL_1 (pad4bit);
+//      REGISTER_DIGITAL_1 (DLS_nto1);
+//      REGISTER_DIGITAL_1 (DLS_1ton);
+//      REGISTER_DIGITAL_1 (binarytogrey4bit);
+//      REGISTER_DIGITAL_1 (greytobinary4bit);
+//      REGISTER_DIGITAL_1 (comp_1bit);
+//      REGISTER_DIGITAL_1 (comp_2bit);
+//      REGISTER_DIGITAL_1 (comp_4bit);
+//      REGISTER_DIGITAL_1 (hpribin4bit);
+//      REGISTER_DIGITAL_1 (VHDL_File);
+//      REGISTER_DIGITAL_1 (Verilog_File);
+//      REGISTER_DIGITAL_1 (Digi_Sim);
   }
 
 
   // file components
   REGISTER_FILE_1 (SpiceFile);
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_FILE_3 (SParamFile, info1, info2, info);
+//      REGISTER_FILE_3 (SParamFile, info1, info2, info);
   }
   REGISTER_FILE_1 (Subcircuit);
   if (QucsSettings.DefaultSimulator != spicecompat::simQucsator) {
@@ -507,7 +506,8 @@ void Module::registerModules (void) {
   REGISTER_SIMULATION_1 (TR_Sim);
   REGISTER_SIMULATION_1 (AC_Sim);
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator)
-      REGISTER_SIMULATION_1 (SP_Sim);
+//      REGISTER_SIMULATION_1 (SP_Sim);
+
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator||
       QucsSettings.DefaultSimulator == spicecompat::simXyceSer||
       QucsSettings.DefaultSimulator == spicecompat::simXycePar)
@@ -515,7 +515,8 @@ void Module::registerModules (void) {
   REGISTER_SIMULATION_1 (Param_Sweep);
   REGISTER_SIMULATION_1 (Digi_Sim);
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator)
-      REGISTER_SIMULATION_1 (Optimize_Sim);
+//      REGISTER_SIMULATION_1 (Optimize_Sim);
+
   if (QucsSettings.DefaultSimulator != spicecompat::simQucsator) {
       REGISTER_SIMULATION_1 (SpiceFourier);
       REGISTER_SIMULATION_1 (SpiceNoise);
@@ -549,8 +550,8 @@ void Module::registerModules (void) {
 
   // external simulation
   if (QucsSettings.DefaultSimulator == spicecompat::simQucsator) {
-      REGISTER_EXTERNAL_1 (ETR_Sim);
-      REGISTER_EXTERNAL_1 (ecvs);
+//      REGISTER_EXTERNAL_1 (ETR_Sim);
+//      REGISTER_EXTERNAL_1 (ecvs);
   }
 
   if (QucsSettings.DefaultSimulator != spicecompat::simQucsator) {

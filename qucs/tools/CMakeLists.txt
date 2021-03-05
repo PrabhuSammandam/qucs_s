@@ -18,7 +18,6 @@ set(SRCS
   q3gdict.cpp
   q3glist.cpp
   q3scrollview.cpp
-  q3frame.cpp
   )
 
 set(HDRS
@@ -34,7 +33,7 @@ set(HDRS
   q3scrollview.h
   )
 
-QT6_WRAP_CPP( MOC_SRCS q3frame.h q3scrollview.h )
+QT6_WRAP_CPP( MOC_SRCS q3scrollview.h )
 
 add_library(${PROJECT_NAME} ${SRCS} ${HDRS} ${MOC_SRCS})
 

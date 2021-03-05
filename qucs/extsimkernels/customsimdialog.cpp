@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 
-
+#include <QtWidgets>
 #include "customsimdialog.h"
 #include "node.h"
 #include <QRegExp>

@@ -42,12 +42,9 @@
 #ifndef Q3SCROLLVIEW_H
 #define Q3SCROLLVIEW_H
 
-#include <QtWidgets>
-#include "q3frame.h"
-#include <QtWidgets/qscrollbar.h>
-
+#include <QFrame>
+#include <QScrollBar>
 class Q3ScrollViewData;
-class Q3ScrollView;
 class QWidget;
 
 class QClipperWidget : public QWidget
@@ -60,7 +57,7 @@ public:
 };
 
 
-class  Q3ScrollView : public Q3Frame
+class  Q3ScrollView : public QFrame
 {
     Q_OBJECT
     Q_ENUMS( ResizePolicy ScrollBarMode )
@@ -76,7 +73,7 @@ class  Q3ScrollView : public Q3Frame
     Q_PROPERTY( bool dragAutoScroll READ dragAutoScroll WRITE setDragAutoScroll )
 
 public:
-    Q3ScrollView(QWidget* parent=0, const char* name=0, Qt::WindowFlags f=Qt::WindowFlags());
+    Q3ScrollView(QWidget* parent=0, Qt::WindowFlags f=Qt::WindowFlags());
     ~Q3ScrollView();
 
     enum ResizePolicy { Default, Manual, AutoOne, AutoOneFit };
@@ -120,7 +117,7 @@ public:
 
     void	resize( int w, int h );
     void	resize( const QSize& );
-    void	setVisible(bool visible);
+    void	setVisible(bool visible)override;
 
     void	updateContents( int x, int y, int w, int h );
     void	updateContents( const QRect& r );
@@ -138,8 +135,8 @@ public:
     bool	hasStaticBackground() const;
 
     QSize	viewportSize( int, int ) const;
-    QSize	sizeHint() const;
-    QSize	minimumSizeHint() const;
+    QSize	sizeHint() const override;
+    QSize	minimumSizeHint() const override;
 
     void	removeChild(QObject* child);
 
@@ -209,26 +206,27 @@ public:
     int bottomMargin() const;
 protected:
 
-    bool focusNextPrevChild( bool next );
+    bool focusNextPrevChild( bool next )override;
 
     virtual void setHBarGeometry(QScrollBar& hbar, int x, int y, int w, int h);
     virtual void setVBarGeometry(QScrollBar& vbar, int x, int y, int w, int h);
 
-    void resizeEvent(QResizeEvent*);
-    void  mousePressEvent( QMouseEvent * );
-    void  mouseReleaseEvent( QMouseEvent * );
-    void  mouseDoubleClickEvent( QMouseEvent * );
-    void  mouseMoveEvent( QMouseEvent * );
-    void  wheelEvent( QWheelEvent * );
-    void contextMenuEvent( QContextMenuEvent * );
-    bool eventFilter( QObject *, QEvent *e );
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent(QResizeEvent*) override;
+    void  mousePressEvent( QMouseEvent * )override;
+    void  mouseReleaseEvent( QMouseEvent * )override;
+    void  mouseDoubleClickEvent( QMouseEvent * )override;
+    void  mouseMoveEvent( QMouseEvent * )override;
+    void  wheelEvent( QWheelEvent * )override;
+    void contextMenuEvent( QContextMenuEvent * )override;
+    bool eventFilter( QObject *, QEvent *e )override;
 
     void setCachedSizeHint( const QSize &sh ) const;
     QSize cachedSizeHint() const;
     void fontChange( const QFont & );
 
 private:
-    void drawContents( QPainter* );
+    virtual void drawContents( QPainter* );
     void moveContents(int x, int y);
 
     Q3ScrollViewData* d;

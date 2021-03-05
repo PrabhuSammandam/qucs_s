@@ -1428,6 +1428,7 @@ int Schematic::adjustPortNumbers()
   QFileInfo Info (DataDisplay);
   QString Suffix = Info.suffix();
 
+#if 0
   // handle VHDL file symbol
   if (Suffix == "vhd" || Suffix == "vhdl") {
     QStringList::iterator it;
@@ -1583,6 +1584,7 @@ int Schematic::adjustPortNumbers()
   }
   // handle schematic symbol
   else
+#endif
   {
       // go through all components in a schematic
       for(Component *pc = DocComps.first(); pc!=0; pc = DocComps.next())

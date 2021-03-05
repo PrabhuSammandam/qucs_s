@@ -146,6 +146,7 @@ public:
         vMode = Q3ScrollView::Auto;
         hMode = Q3ScrollView::Auto;
         corner = 0;
+        scrollbar_timer.setSingleShot(true);
         vbar->setSingleStep(20);
         vbar->setPageStep(1);
         hbar->setSingleStep(20);
@@ -551,11 +552,11 @@ void Q3ScrollViewData::viewportResized(int w, int h)
     widget flags are propagated to the parent constructor as usual.
 */
 
-Q3ScrollView::Q3ScrollView(QWidget *parent, const char *name, Qt::WindowFlags f) :
-    Q3Frame(parent, name, f/* & (~WStaticContents) & (~WNoAutoErase) & (~WResizeNoErase)*/)
+Q3ScrollView::Q3ScrollView(QWidget *parent, Qt::WindowFlags f) :
+    QFrame(parent, f/* & (~WStaticContents) & (~WNoAutoErase) & (~WResizeNoErase)*/)
 {
-    setAttribute(Qt::WA_StaticContents, false);
-    setAttribute(Qt::WA_OpaquePaintEvent, false);
+//    setAttribute(Qt::WA_StaticContents, false);
+//    setAttribute(Qt::WA_OpaquePaintEvent, false);
 
     WindowFlags flags = Qt::WindowFlags();//WResizeNoErase | (f&WPaintClever) | (f&WRepaintNoErase) | (f&WStaticContents);
     d = new Q3ScrollViewData(this, flags);
@@ -581,7 +582,7 @@ Q3ScrollView::Q3ScrollView(QWidget *parent, const char *name, Qt::WindowFlags f)
     connect(&d->scrollbar_timer, SIGNAL(timeout()),
              this, SLOT(updateScrollBars()));
 
-    setFrameStyle(Q3Frame::StyledPanel | Q3Frame::Sunken);
+    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 }
@@ -634,13 +635,13 @@ Q3ScrollView::~Q3ScrollView()
 void Q3ScrollView::hbarIsPressed()
 {
     d->hbarPressed = true;
-    emit(horizontalSliderPressed());
+    emit horizontalSliderPressed();
 }
 
 void Q3ScrollView::hbarIsReleased()
 {
     d->hbarPressed = false;
-    emit(horizontalSliderReleased());
+    emit horizontalSliderReleased();
 }
 
 /*!
@@ -654,13 +655,13 @@ bool Q3ScrollView::isHorizontalSliderPressed()
 void Q3ScrollView::vbarIsPressed()
 {
     d->vbarPressed = true;
-    emit(verticalSliderPressed());
+    emit verticalSliderPressed();
 }
 
 void Q3ScrollView::vbarIsReleased()
 {
     d->vbarPressed = false;
-    emit(verticalSliderReleased());
+    emit verticalSliderReleased();
 }
 
 /*!
@@ -674,9 +675,8 @@ bool Q3ScrollView::isVerticalSliderPressed()
 /*!
     \internal
 */
-void Q3ScrollView::styleChange(QStyle& old)
+void Q3ScrollView::styleChange(QStyle& )
 {
-//    QWidget::styleChange(old);
     updateScrollBars();
     d->cachedSizeHint = QSize();
 }
@@ -684,9 +684,8 @@ void Q3ScrollView::styleChange(QStyle& old)
 /*!
     \internal
 */
-void Q3ScrollView::fontChange(const QFont &old)
+void Q3ScrollView::fontChange(const QFont &)
 {
-//    QWidget::fontChange(old);
     updateScrollBars();
     d->cachedSizeHint = QSize();
 }
@@ -1101,12 +1100,30 @@ void Q3ScrollView::resize(const QSize& s)
     resize(s.width(), s.height());
 }
 
+void Q3ScrollView::paintEvent(QPaintEvent * event)
+{
+    QPainter paint(this);
+    if (!contentsRect().contains(event->rect())) {
+        paint.save();
+        paint.setClipRegion(event->region().intersected(frameRect()));
+        drawFrame(&paint);
+        paint.restore();
+    }
+    if (event->rect().intersects(contentsRect())) {
+        paint.setClipRegion(event->region().intersected(contentsRect()));
+        drawContents(&paint);
+    }
+}
+
 /*!
     \reimp
 */
 void Q3ScrollView::resizeEvent(QResizeEvent* event)
 {
-    Q3Frame::resizeEvent(event);
+    if (event->size() == event->oldSize())
+        frameChanged();
+
+//    QFrame::resizeEvent(event);
 
 #if 0
     if (QApplication::reverseLayout()) {
@@ -1341,7 +1358,7 @@ Q3ScrollView::ResizePolicy Q3ScrollView::resizePolicy() const
 */
 void Q3ScrollView::setEnabled(bool enable)
 {
-    Q3Frame::setEnabled(enable);
+    QFrame::setEnabled(enable);
 }
 
 /*!
@@ -1363,7 +1380,7 @@ void Q3ScrollView::removeChild(QWidget* child)
 void Q3ScrollView::removeChild(QObject* child)
 {
     child->deleteLater();
-//    Q3Frame::removeChild(child);
+//    QFrame::removeChild(child);
 }
 
 /*!
@@ -1580,7 +1597,7 @@ bool Q3ScrollView::eventFilter(QObject *obj, QEvent *e)
         else if (e->type() == QEvent::Move)
             d->autoMove(this);
     }
-    return Q3Frame::eventFilter(obj, e);  // always continue with standard event processing
+    return QFrame::eventFilter(obj, e);  // always continue with standard event processing
 }
 
 /*!
@@ -2401,7 +2418,7 @@ void Q3ScrollView::frameChanged()
     // changing the frame
 //    if (Q3ListView *lv = qobject_cast<Q3ListView *>(this))
 //        lv->triggerUpdate();
-    Q3Frame::frameChanged();
+//    QFrame::frameChanged();
     updateScrollBars();
 }
 
@@ -2545,7 +2562,7 @@ bool Q3ScrollView::focusNextPrevChild(bool next)
 {
     //  Makes sure that the new focus widget is on-screen, if
     //  necessary by scrolling the scroll view.
-    bool retval = Q3Frame::focusNextPrevChild(next);
+    bool retval = QFrame::focusNextPrevChild(next);
     if (retval) {
         QWidget *w = window()->focusWidget();
         if (isAncestorOf(w)) {

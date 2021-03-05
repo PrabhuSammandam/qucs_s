@@ -2383,11 +2383,11 @@ void QucsApp::slotSelectSubcircuit(const QModelIndex &idx)
   activeAction = 0;
 
   Component *Comp;
-  if(isVHDL)
-    Comp = new VHDL_File();
-  else if(isVerilog)
-    Comp = new Verilog_File();
-  else
+//  if(isVHDL)
+//    Comp = new VHDL_File();
+//  else if(isVerilog)
+//    Comp = new Verilog_File();
+//  else
     Comp = new Subcircuit();
   Comp->Props.first()->Value = idx.sibling(idx.row(), 0).data().toString();
   Comp->recreate(0);

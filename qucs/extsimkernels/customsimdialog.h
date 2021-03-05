@@ -23,8 +23,9 @@
 #include "schematic.h"
 #include "spicecomponents/sp_customsim.h"
 #include "components/component.h"
-#include <QtGui>
+#include <QDialog>
 
+class QLineEdit;
 
 /*!
   \file customsimdialog.h

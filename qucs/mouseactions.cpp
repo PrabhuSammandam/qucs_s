@@ -921,7 +921,7 @@ void MouseActions::rightPressMenu(Schematic *Doc, QMouseEvent *Event, float fX, 
       focusMEvent = nullptr;
   }
   focusMEvent = Event->clone();  // remember event for "edit component" action
-  ComponentMenu->popup(Event->globalPos());
+  ComponentMenu->popup(Event->globalPosition().toPoint());
   Doc->viewport()->update();
   drawn = false;
 }
